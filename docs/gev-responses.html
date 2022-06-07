@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 GEV responses | Liesel Tutorials</title>
+  <meta name="description" content="Tutorial book for the Liesel probabilistic programming framework" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 GEV responses | Liesel Tutorials" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://avatars.githubusercontent.com/u/53620082" />
+  <meta property="og:description" content="Tutorial book for the Liesel probabilistic programming framework" />
+  <meta name="github-repo" content="liesel-devs/liesel-tutorials" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 GEV responses | Liesel Tutorials" />
+  
+  <meta name="twitter:description" content="Tutorial book for the Liesel probabilistic programming framework" />
+  <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/53620082" />
+
+<meta name="author" content="Hannes Riebl, Paul Wiemann" />
+
+
+<meta name="date" content="2022-06-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="location-scale-regression.html"/>
+<link rel="next" href="comparing-samplers.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Liesel Tutorials</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#further-reading"><i class="fa fa-check"></i><b>1.2</b> Further reading</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>2</b> Linear regression</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="linear-regression.html"><a href="linear-regression.html#model-building-with-liesel"><i class="fa fa-check"></i><b>2.1</b> Model building with Liesel</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="linear-regression.html"><a href="linear-regression.html#probabilistic-graphical-models"><i class="fa fa-check"></i><b>2.1.1</b> Probabilistic graphical models</a></li>
+<li class="chapter" data-level="2.1.2" data-path="linear-regression.html"><a href="linear-regression.html#generating-the-data"><i class="fa fa-check"></i><b>2.1.2</b> Generating the data</a></li>
+<li class="chapter" data-level="2.1.3" data-path="linear-regression.html"><a href="linear-regression.html#building-the-model-graph"><i class="fa fa-check"></i><b>2.1.3</b> Building the model graph</a></li>
+<li class="chapter" data-level="2.1.4" data-path="linear-regression.html"><a href="linear-regression.html#node-and-model-log-probabilities"><i class="fa fa-check"></i><b>2.1.4</b> Node and model log-probabilities</a></li>
+<li class="chapter" data-level="2.1.5" data-path="linear-regression.html"><a href="linear-regression.html#pure-stateless-jax-functions"><i class="fa fa-check"></i><b>2.1.5</b> Pure, stateless JAX functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="linear-regression.html"><a href="linear-regression.html#mcmc-inference-with-goose"><i class="fa fa-check"></i><b>2.2</b> MCMC inference with Goose</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="linear-regression.html"><a href="linear-regression.html#using-a-gibbs-kernel"><i class="fa fa-check"></i><b>2.2.1</b> Using a Gibbs kernel</a></li>
+<li class="chapter" data-level="2.2.2" data-path="linear-regression.html"><a href="linear-regression.html#parameter-transformations"><i class="fa fa-check"></i><b>2.2.2</b> Parameter transformations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="location-scale-regression.html"><a href="location-scale-regression.html"><i class="fa fa-check"></i><b>3</b> Location-scale regression</a></li>
+<li class="chapter" data-level="4" data-path="gev-responses.html"><a href="gev-responses.html"><i class="fa fa-check"></i><b>4</b> GEV responses</a></li>
+<li class="chapter" data-level="5" data-path="comparing-samplers.html"><a href="comparing-samplers.html"><i class="fa fa-check"></i><b>5</b> Comparing samplers</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="comparing-samplers.html"><a href="comparing-samplers.html#metropolis-in-gibbs"><i class="fa fa-check"></i><b>5.1</b> Metropolis-in-Gibbs</a></li>
+<li class="chapter" data-level="5.2" data-path="comparing-samplers.html"><a href="comparing-samplers.html#nuts-sampler"><i class="fa fa-check"></i><b>5.2</b> NUTS sampler</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Liesel Tutorials</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="gev-responses" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> GEV responses<a href="gev-responses.html#gev-responses" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this tutorial, we illustrate how to set up a distributional regression model with the generalized extreme value distribution as a response distribution. First, we simulate some data in R:</p>
+<ul>
+<li>The location parameter (<span class="math inline">\(\mu\)</span>) is a function of an intercept and a non-linear covariate effect.</li>
+<li>The scale parameter (<span class="math inline">\(\sigma\)</span>) is a function of an intercept and a linear effect and uses a log-link.</li>
+<li>The shape or concentration parameter (<span class="math inline">\(\xi\)</span>) is a function of an intercept and a linear effect.</li>
+</ul>
+<p>After simulating the data, we can configure the model with a single call to the <code>rliesel::liesel()</code> function.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="gev-responses.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rliesel)</span></code></pre></div>
+<pre><code>## Please set your Liesel venv, e.g. with use_liesel_venv()</code></pre>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="gev-responses.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(VGAM)</span></code></pre></div>
+<pre><code>## Loading required package: stats4</code></pre>
+<pre><code>## Loading required package: splines</code></pre>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="gev-responses.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">use_liesel_venv</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;/home/hannes/.local/share/virtualenvs/liesel-tutorials-1k9wp3mI&quot;</code></pre>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="gev-responses.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1337</span>)</span>
+<span id="cb98-2"><a href="gev-responses.html#cb98-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-3"><a href="gev-responses.html#cb98-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb98-4"><a href="gev-responses.html#cb98-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-5"><a href="gev-responses.html#cb98-5" aria-hidden="true" tabindex="-1"></a>x0 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb98-6"><a href="gev-responses.html#cb98-6" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb98-7"><a href="gev-responses.html#cb98-7" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb98-8"><a href="gev-responses.html#cb98-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-9"><a href="gev-responses.html#cb98-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rgev</span>(</span>
+<span id="cb98-10"><a href="gev-responses.html#cb98-10" aria-hidden="true" tabindex="-1"></a>  n,</span>
+<span id="cb98-11"><a href="gev-responses.html#cb98-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">location =</span> <span class="dv">0</span> <span class="sc">+</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> x0),</span>
+<span id="cb98-12"><a href="gev-responses.html#cb98-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">3</span> <span class="sc">+</span> x1),</span>
+<span id="cb98-13"><a href="gev-responses.html#cb98-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">shape =</span> <span class="fl">0.1</span> <span class="sc">+</span> x2</span>
+<span id="cb98-14"><a href="gev-responses.html#cb98-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb98-15"><a href="gev-responses.html#cb98-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-16"><a href="gev-responses.html#cb98-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-48-23.png" width="672" /></p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="gev-responses.html#cb99-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">liesel</span>(</span>
+<span id="cb99-2"><a href="gev-responses.html#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> y,</span>
+<span id="cb99-3"><a href="gev-responses.html#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">distribution =</span> <span class="st">&quot;GeneralizedExtremeValue&quot;</span>,</span>
+<span id="cb99-4"><a href="gev-responses.html#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="fu">list</span>(</span>
+<span id="cb99-5"><a href="gev-responses.html#cb99-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">loc =</span> <span class="fu">predictor</span>(<span class="sc">~</span> <span class="fu">s</span>(x0)),</span>
+<span id="cb99-6"><a href="gev-responses.html#cb99-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale =</span> <span class="fu">predictor</span>(<span class="sc">~</span> x1, <span class="at">inverse_link =</span> <span class="st">&quot;Exp&quot;</span>),</span>
+<span id="cb99-7"><a href="gev-responses.html#cb99-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">concentration =</span> <span class="fu">predictor</span>(<span class="sc">~</span> x2)</span>
+<span id="cb99-8"><a href="gev-responses.html#cb99-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb99-9"><a href="gev-responses.html#cb99-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Now, we can continue in Python and use the <code>lsl.dist_reg_mcmc()</code> function to set up a sampling algorithm with IWLS kernels for the regression coefficients (<span class="math inline">\(\boldsymbol{\beta}\)</span>) and a Gibbs kernel for the smoothing parameter (<span class="math inline">\(\tau^2\)</span>) of the spline. Note that we need to set <span class="math inline">\(\beta_0\)</span> for <span class="math inline">\(\xi\)</span> to 0.1 manually, because <span class="math inline">\(\xi = 0\)</span> breaks the sampler.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb100-1"><a href="gev-responses.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> liesel.liesel <span class="im">as</span> lsl</span>
+<span id="cb100-2"><a href="gev-responses.html#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
+<span id="cb100-3"><a href="gev-responses.html#cb100-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-4"><a href="gev-responses.html#cb100-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> r.model</span>
+<span id="cb100-5"><a href="gev-responses.html#cb100-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-6"><a href="gev-responses.html#cb100-6" aria-hidden="true" tabindex="-1"></a><span class="co"># concentration = 0 seems to break the sampler</span></span>
+<span id="cb100-7"><a href="gev-responses.html#cb100-7" aria-hidden="true" tabindex="-1"></a>model.nodes[<span class="st">&quot;concentration_p0_beta&quot;</span>].value <span class="op">=</span> jnp.array([<span class="fl">0.1</span>, <span class="fl">0.0</span>])</span>
+<span id="cb100-8"><a href="gev-responses.html#cb100-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-9"><a href="gev-responses.html#cb100-9" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> lsl.dist_reg_mcmc(model, seed<span class="op">=</span><span class="dv">42</span>, num_chains<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb100-10"><a href="gev-responses.html#cb100-10" aria-hidden="true" tabindex="-1"></a>builder.set_duration(warmup_duration<span class="op">=</span><span class="dv">1000</span>, posterior_duration<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb100-11"><a href="gev-responses.html#cb100-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-12"><a href="gev-responses.html#cb100-12" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> builder.build()</span>
+<span id="cb100-13"><a href="gev-responses.html#cb100-13" aria-hidden="true" tabindex="-1"></a>engine.sample_all_epochs()</span></code></pre></div>
+<pre><code>## INFO - Starting epoch: FAST_ADAPTATION, 75 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 0, 0, 0 / 75 transitions
+## WARNING - Errors per chain for kernel_03: 1, 0, 0, 0 / 75 transitions
+## WARNING - Errors per chain for kernel_04: 7, 4, 2, 6 / 75 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 2, 1, 0 / 25 transitions
+## WARNING - Errors per chain for kernel_02: 1, 2, 1, 0 / 25 transitions
+## WARNING - Errors per chain for kernel_03: 3, 1, 1, 2 / 25 transitions
+## WARNING - Errors per chain for kernel_04: 2, 1, 1, 3 / 25 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 2, 0, 2 / 50 transitions
+## WARNING - Errors per chain for kernel_02: 2, 1, 1, 0 / 50 transitions
+## WARNING - Errors per chain for kernel_03: 3, 4, 1, 2 / 50 transitions
+## WARNING - Errors per chain for kernel_04: 3, 1, 3, 1 / 50 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 0, 1, 2, 0 / 100 transitions
+## WARNING - Errors per chain for kernel_02: 1, 1, 2, 1 / 100 transitions
+## WARNING - Errors per chain for kernel_03: 1, 1, 2, 4 / 100 transitions
+## WARNING - Errors per chain for kernel_04: 1, 1, 1, 1 / 100 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 0, 1, 1 / 200 transitions
+## WARNING - Errors per chain for kernel_02: 1, 1, 1, 0 / 200 transitions
+## WARNING - Errors per chain for kernel_03: 1, 0, 0, 0 / 200 transitions
+## WARNING - Errors per chain for kernel_04: 3, 3, 5, 2 / 200 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 3, 2, 1, 2 / 500 transitions
+## WARNING - Errors per chain for kernel_02: 0, 0, 1, 2 / 500 transitions
+## WARNING - Errors per chain for kernel_03: 0, 2, 2, 1 / 500 transitions
+## WARNING - Errors per chain for kernel_04: 3, 1, 4, 3 / 500 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 1, 2, 1 / 50 transitions
+## WARNING - Errors per chain for kernel_02: 1, 2, 1, 0 / 50 transitions
+## WARNING - Errors per chain for kernel_03: 2, 1, 1, 1 / 50 transitions
+## WARNING - Errors per chain for kernel_04: 1, 1, 3, 2 / 50 transitions
+## INFO - Finished epoch
+## INFO - Finished warmup
+## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_04: 0, 1, 1, 1 / 1000 transitions
+## INFO - Finished epoch</code></pre>
+<p>Some tabular summary statistics of the posterior samples:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb102-1"><a href="gev-responses.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> liesel.goose <span class="im">as</span> gs</span>
+<span id="cb102-2"><a href="gev-responses.html#cb102-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-3"><a href="gev-responses.html#cb102-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
+<span id="cb102-4"><a href="gev-responses.html#cb102-4" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> gs.summary(results)</span>
+<span id="cb102-5"><a href="gev-responses.html#cb102-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-6"><a href="gev-responses.html#cb102-6" aria-hidden="true" tabindex="-1"></a>summary.loc[<span class="st">&quot;loc_p0_beta&quot;</span>]</span></code></pre></div>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="11%" />
+<col width="5%" />
+<col width="4%" />
+<col width="5%" />
+<col width="4%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">param_index</th>
+<th align="right">chain_index</th>
+<th align="right">num_samples</th>
+<th align="right">num_effective</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">rhat</th>
+<th align="right">q_5</th>
+<th align="right">q_50</th>
+<th align="right">q_95</th>
+<th align="right">hdi_90_low</th>
+<th align="right">hdi_90_high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">loc_p0_beta</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1000</td>
+<td align="right">30.278</td>
+<td align="right">0.028</td>
+<td align="right">0.002</td>
+<td align="right">1.026</td>
+<td align="right">0.024</td>
+<td align="right">0.028</td>
+<td align="right">0.032</td>
+<td align="right">0.024</td>
+<td align="right">0.031</td>
+</tr>
+<tr class="even">
+<td align="left">loc_p0_beta</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1000</td>
+<td align="right">24.974</td>
+<td align="right">0.027</td>
+<td align="right">0.002</td>
+<td align="right">1.026</td>
+<td align="right">0.023</td>
+<td align="right">0.027</td>
+<td align="right">0.032</td>
+<td align="right">0.023</td>
+<td align="right">0.031</td>
+</tr>
+<tr class="odd">
+<td align="left">loc_p0_beta</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1000</td>
+<td align="right">25.873</td>
+<td align="right">0.028</td>
+<td align="right">0.003</td>
+<td align="right">1.026</td>
+<td align="right">0.023</td>
+<td align="right">0.028</td>
+<td align="right">0.032</td>
+<td align="right">0.023</td>
+<td align="right">0.032</td>
+</tr>
+<tr class="even">
+<td align="left">loc_p0_beta</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1000</td>
+<td align="right">42.727</td>
+<td align="right">0.027</td>
+<td align="right">0.003</td>
+<td align="right">1.026</td>
+<td align="right">0.023</td>
+<td align="right">0.027</td>
+<td align="right">0.031</td>
+<td align="right">0.022</td>
+<td align="right">0.03</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb103"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb103-1"><a href="gev-responses.html#cb103-1" aria-hidden="true" tabindex="-1"></a>summary.loc[<span class="st">&quot;loc_np0_tau2&quot;</span>]</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="11%" />
+<col width="5%" />
+<col width="4%" />
+<col width="5%" />
+<col width="4%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">param_index</th>
+<th align="right">chain_index</th>
+<th align="right">num_samples</th>
+<th align="right">num_effective</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">rhat</th>
+<th align="right">q_5</th>
+<th align="right">q_50</th>
+<th align="right">q_95</th>
+<th align="right">hdi_90_low</th>
+<th align="right">hdi_90_high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">loc_np0_tau2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1000</td>
+<td align="right">984.253</td>
+<td align="right">6.38</td>
+<td align="right">4.113</td>
+<td align="right">1</td>
+<td align="right">2.511</td>
+<td align="right">5.152</td>
+<td align="right">14.167</td>
+<td align="right">2</td>
+<td align="right">11.481</td>
+</tr>
+<tr class="even">
+<td align="left">loc_np0_tau2</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1000</td>
+<td align="right">790.647</td>
+<td align="right">6.432</td>
+<td align="right">4.792</td>
+<td align="right">1</td>
+<td align="right">2.583</td>
+<td align="right">5.142</td>
+<td align="right">14.466</td>
+<td align="right">1.681</td>
+<td align="right">11.045</td>
+</tr>
+<tr class="odd">
+<td align="left">loc_np0_tau2</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1000</td>
+<td align="right">1017.22</td>
+<td align="right">6.4</td>
+<td align="right">4.253</td>
+<td align="right">1</td>
+<td align="right">2.461</td>
+<td align="right">5.105</td>
+<td align="right">14.524</td>
+<td align="right">2.034</td>
+<td align="right">11.36</td>
+</tr>
+<tr class="even">
+<td align="left">loc_np0_tau2</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1000</td>
+<td align="right">850.055</td>
+<td align="right">6.244</td>
+<td align="right">4.059</td>
+<td align="right">1</td>
+<td align="right">2.321</td>
+<td align="right">5.238</td>
+<td align="right">13.022</td>
+<td align="right">1.673</td>
+<td align="right">10.825</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb104"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb104-1"><a href="gev-responses.html#cb104-1" aria-hidden="true" tabindex="-1"></a>summary.loc[<span class="st">&quot;scale_p0_beta&quot;</span>]</span></code></pre></div>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="11%" />
+<col width="5%" />
+<col width="4%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">param_index</th>
+<th align="right">chain_index</th>
+<th align="right">num_samples</th>
+<th align="right">num_effective</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">rhat</th>
+<th align="right">q_5</th>
+<th align="right">q_50</th>
+<th align="right">q_95</th>
+<th align="right">hdi_90_low</th>
+<th align="right">hdi_90_high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">scale_p0_beta</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1000</td>
+<td align="right">20.562</td>
+<td align="right">-3.059</td>
+<td align="right">0.058</td>
+<td align="right">1.019</td>
+<td align="right">-3.154</td>
+<td align="right">-3.062</td>
+<td align="right">-2.955</td>
+<td align="right">-3.156</td>
+<td align="right">-2.967</td>
+</tr>
+<tr class="even">
+<td align="left">scale_p0_beta</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1000</td>
+<td align="right">26.683</td>
+<td align="right">-3.07</td>
+<td align="right">0.056</td>
+<td align="right">1.019</td>
+<td align="right">-3.158</td>
+<td align="right">-3.068</td>
+<td align="right">-2.978</td>
+<td align="right">-3.161</td>
+<td align="right">-2.981</td>
+</tr>
+<tr class="odd">
+<td align="left">scale_p0_beta</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1000</td>
+<td align="right">22.897</td>
+<td align="right">-3.055</td>
+<td align="right">0.06</td>
+<td align="right">1.019</td>
+<td align="right">-3.153</td>
+<td align="right">-3.053</td>
+<td align="right">-2.954</td>
+<td align="right">-3.148</td>
+<td align="right">-2.951</td>
+</tr>
+<tr class="even">
+<td align="left">scale_p0_beta</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1000</td>
+<td align="right">42.393</td>
+<td align="right">-3.079</td>
+<td align="right">0.06</td>
+<td align="right">1.019</td>
+<td align="right">-3.177</td>
+<td align="right">-3.077</td>
+<td align="right">-2.978</td>
+<td align="right">-3.181</td>
+<td align="right">-2.985</td>
+</tr>
+<tr class="odd">
+<td align="left">scale_p0_beta</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1000</td>
+<td align="right">30.487</td>
+<td align="right">1.044</td>
+<td align="right">0.073</td>
+<td align="right">1.013</td>
+<td align="right">0.932</td>
+<td align="right">1.041</td>
+<td align="right">1.168</td>
+<td align="right">0.931</td>
+<td align="right">1.167</td>
+</tr>
+<tr class="even">
+<td align="left">scale_p0_beta</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1000</td>
+<td align="right">46.227</td>
+<td align="right">1.047</td>
+<td align="right">0.071</td>
+<td align="right">1.013</td>
+<td align="right">0.927</td>
+<td align="right">1.048</td>
+<td align="right">1.158</td>
+<td align="right">0.934</td>
+<td align="right">1.161</td>
+</tr>
+<tr class="odd">
+<td align="left">scale_p0_beta</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1000</td>
+<td align="right">58.017</td>
+<td align="right">1.04</td>
+<td align="right">0.067</td>
+<td align="right">1.013</td>
+<td align="right">0.935</td>
+<td align="right">1.04</td>
+<td align="right">1.148</td>
+<td align="right">0.942</td>
+<td align="right">1.155</td>
+</tr>
+<tr class="even">
+<td align="left">scale_p0_beta</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1000</td>
+<td align="right">58.885</td>
+<td align="right">1.06</td>
+<td align="right">0.074</td>
+<td align="right">1.013</td>
+<td align="right">0.939</td>
+<td align="right">1.058</td>
+<td align="right">1.185</td>
+<td align="right">0.947</td>
+<td align="right">1.19</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb105"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb105-1"><a href="gev-responses.html#cb105-1" aria-hidden="true" tabindex="-1"></a>summary.loc[<span class="st">&quot;concentration_p0_beta&quot;</span>]</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="14%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="10%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="8%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">param_index</th>
+<th align="right">chain_index</th>
+<th align="right">num_samples</th>
+<th align="right">num_effective</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">rhat</th>
+<th align="right">q_5</th>
+<th align="right">q_50</th>
+<th align="right">q_95</th>
+<th align="right">hdi_90_low</th>
+<th align="right">hdi_90_high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">concentration_p0_beta</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1000</td>
+<td align="right">93.632</td>
+<td align="right">0.067</td>
+<td align="right">0.05</td>
+<td align="right">1.005</td>
+<td align="right">-0.013</td>
+<td align="right">0.066</td>
+<td align="right">0.151</td>
+<td align="right">-0.022</td>
+<td align="right">0.138</td>
+</tr>
+<tr class="even">
+<td align="left">concentration_p0_beta</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1000</td>
+<td align="right">59.778</td>
+<td align="right">0.068</td>
+<td align="right">0.047</td>
+<td align="right">1.005</td>
+<td align="right">-0.004</td>
+<td align="right">0.065</td>
+<td align="right">0.145</td>
+<td align="right">-0.004</td>
+<td align="right">0.145</td>
+</tr>
+<tr class="odd">
+<td align="left">concentration_p0_beta</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1000</td>
+<td align="right">95.529</td>
+<td align="right">0.074</td>
+<td align="right">0.054</td>
+<td align="right">1.005</td>
+<td align="right">-0.016</td>
+<td align="right">0.071</td>
+<td align="right">0.167</td>
+<td align="right">-0.017</td>
+<td align="right">0.165</td>
+</tr>
+<tr class="even">
+<td align="left">concentration_p0_beta</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1000</td>
+<td align="right">143.618</td>
+<td align="right">0.072</td>
+<td align="right">0.049</td>
+<td align="right">1.005</td>
+<td align="right">-0.009</td>
+<td align="right">0.072</td>
+<td align="right">0.154</td>
+<td align="right">-0.012</td>
+<td align="right">0.148</td>
+</tr>
+<tr class="odd">
+<td align="left">concentration_p0_beta</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1000</td>
+<td align="right">54.539</td>
+<td align="right">1.074</td>
+<td align="right">0.102</td>
+<td align="right">1.006</td>
+<td align="right">0.916</td>
+<td align="right">1.073</td>
+<td align="right">1.239</td>
+<td align="right">0.926</td>
+<td align="right">1.248</td>
+</tr>
+<tr class="even">
+<td align="left">concentration_p0_beta</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1000</td>
+<td align="right">44.691</td>
+<td align="right">1.052</td>
+<td align="right">0.101</td>
+<td align="right">1.006</td>
+<td align="right">0.881</td>
+<td align="right">1.057</td>
+<td align="right">1.212</td>
+<td align="right">0.881</td>
+<td align="right">1.212</td>
+</tr>
+<tr class="odd">
+<td align="left">concentration_p0_beta</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1000</td>
+<td align="right">78.288</td>
+<td align="right">1.069</td>
+<td align="right">0.102</td>
+<td align="right">1.006</td>
+<td align="right">0.883</td>
+<td align="right">1.071</td>
+<td align="right">1.224</td>
+<td align="right">0.921</td>
+<td align="right">1.252</td>
+</tr>
+<tr class="even">
+<td align="left">concentration_p0_beta</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1000</td>
+<td align="right">73.146</td>
+<td align="right">1.075</td>
+<td align="right">0.1</td>
+<td align="right">1.006</td>
+<td align="right">0.907</td>
+<td align="right">1.074</td>
+<td align="right">1.242</td>
+<td align="right">0.907</td>
+<td align="right">1.239</td>
+</tr>
+</tbody>
+</table>
+<p>And the corresponding trace plots:</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb106-1"><a href="gev-responses.html#cb106-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;loc_p0_beta&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-1.png" width="385" /></p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb107-1"><a href="gev-responses.html#cb107-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;loc_np0_tau2&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-2.png" width="385" /></p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb108-1"><a href="gev-responses.html#cb108-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;loc_np0_beta&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-3.png" width="961" /></p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb109-1"><a href="gev-responses.html#cb109-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;scale_p0_beta&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-4.png" width="673" /></p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="gev-responses.html#cb110-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;concentration_p0_beta&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-5.png" width="673" /></p>
+<p>We need to reset the index of the <code>summary</code> data frame before we can transfer it to R.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb111-1"><a href="gev-responses.html#cb111-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> summary.reset_index()</span></code></pre></div>
+<p>After transferring the <code>summary</code> data frame to R, we can process it with packages like dplyr and ggplot2. Here is a visualization of the estimated spline vs. the true function:</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="gev-responses.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="gev-responses.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb116-2"><a href="gev-responses.html#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb116-3"><a href="gev-responses.html#cb116-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-4"><a href="gev-responses.html#cb116-4" aria-hidden="true" tabindex="-1"></a>summary <span class="ot">&lt;-</span> py<span class="sc">$</span>summary</span>
+<span id="cb116-5"><a href="gev-responses.html#cb116-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-6"><a href="gev-responses.html#cb116-6" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> summary <span class="sc">%&gt;%</span></span>
+<span id="cb116-7"><a href="gev-responses.html#cb116-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(index <span class="sc">==</span> <span class="st">&quot;loc_np0_beta&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb116-8"><a href="gev-responses.html#cb116-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(param_index) <span class="sc">%&gt;%</span></span>
+<span id="cb116-9"><a href="gev-responses.html#cb116-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>(mean)) <span class="sc">%&gt;%</span></span>
+<span id="cb116-10"><a href="gev-responses.html#cb116-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb116-11"><a href="gev-responses.html#cb116-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-12"><a href="gev-responses.html#cb116-12" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> beta<span class="sc">$</span>mean</span>
+<span id="cb116-13"><a href="gev-responses.html#cb116-13" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">py_to_r</span>(model<span class="sc">$</span>nodes<span class="sc">$</span>loc_np0_X<span class="sc">$</span>value)</span>
+<span id="cb116-14"><a href="gev-responses.html#cb116-14" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta</span>
+<span id="cb116-15"><a href="gev-responses.html#cb116-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-16"><a href="gev-responses.html#cb116-16" aria-hidden="true" tabindex="-1"></a>true <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> x0)</span>
+<span id="cb116-17"><a href="gev-responses.html#cb116-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-18"><a href="gev-responses.html#cb116-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x0 =</span> x0, <span class="at">estimate =</span> estimate, <span class="at">true =</span> true)) <span class="sc">+</span></span>
+<span id="cb116-19"><a href="gev-responses.html#cb116-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x0, estimate), <span class="at">color =</span> <span class="fu">palette</span>()[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb116-20"><a href="gev-responses.html#cb116-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x0, true), <span class="at">color =</span> <span class="fu">palette</span>()[<span class="dv">4</span>]) <span class="sc">+</span></span>
+<span id="cb116-21"><a href="gev-responses.html#cb116-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Estimated spline (red) vs. true function (blue)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb116-22"><a href="gev-responses.html#cb116-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;f&quot;</span>) <span class="sc">+</span></span>
+<span id="cb116-23"><a href="gev-responses.html#cb116-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-53-11.png" width="672" /></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="location-scale-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="comparing-samplers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/liesel-devs/liesel-tutorials/edit/main/rmarkdown/04-gev.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

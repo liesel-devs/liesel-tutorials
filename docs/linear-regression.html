@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Linear regression | Liesel Tutorials</title>
+  <meta name="description" content="Tutorial book for the Liesel probabilistic programming framework" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Linear regression | Liesel Tutorials" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://avatars.githubusercontent.com/u/53620082" />
+  <meta property="og:description" content="Tutorial book for the Liesel probabilistic programming framework" />
+  <meta name="github-repo" content="liesel-devs/liesel-tutorials" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Linear regression | Liesel Tutorials" />
+  
+  <meta name="twitter:description" content="Tutorial book for the Liesel probabilistic programming framework" />
+  <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/53620082" />
+
+<meta name="author" content="Hannes Riebl, Paul Wiemann" />
+
+
+<meta name="date" content="2022-06-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="location-scale-regression.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Liesel Tutorials</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.1</b> Installation</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#further-reading"><i class="fa fa-check"></i><b>1.2</b> Further reading</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>2</b> Linear regression</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="linear-regression.html"><a href="linear-regression.html#model-building-with-liesel"><i class="fa fa-check"></i><b>2.1</b> Model building with Liesel</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="linear-regression.html"><a href="linear-regression.html#probabilistic-graphical-models"><i class="fa fa-check"></i><b>2.1.1</b> Probabilistic graphical models</a></li>
+<li class="chapter" data-level="2.1.2" data-path="linear-regression.html"><a href="linear-regression.html#generating-the-data"><i class="fa fa-check"></i><b>2.1.2</b> Generating the data</a></li>
+<li class="chapter" data-level="2.1.3" data-path="linear-regression.html"><a href="linear-regression.html#building-the-model-graph"><i class="fa fa-check"></i><b>2.1.3</b> Building the model graph</a></li>
+<li class="chapter" data-level="2.1.4" data-path="linear-regression.html"><a href="linear-regression.html#node-and-model-log-probabilities"><i class="fa fa-check"></i><b>2.1.4</b> Node and model log-probabilities</a></li>
+<li class="chapter" data-level="2.1.5" data-path="linear-regression.html"><a href="linear-regression.html#pure-stateless-jax-functions"><i class="fa fa-check"></i><b>2.1.5</b> Pure, stateless JAX functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="linear-regression.html"><a href="linear-regression.html#mcmc-inference-with-goose"><i class="fa fa-check"></i><b>2.2</b> MCMC inference with Goose</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="linear-regression.html"><a href="linear-regression.html#using-a-gibbs-kernel"><i class="fa fa-check"></i><b>2.2.1</b> Using a Gibbs kernel</a></li>
+<li class="chapter" data-level="2.2.2" data-path="linear-regression.html"><a href="linear-regression.html#parameter-transformations"><i class="fa fa-check"></i><b>2.2.2</b> Parameter transformations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="location-scale-regression.html"><a href="location-scale-regression.html"><i class="fa fa-check"></i><b>3</b> Location-scale regression</a></li>
+<li class="chapter" data-level="4" data-path="gev-responses.html"><a href="gev-responses.html"><i class="fa fa-check"></i><b>4</b> GEV responses</a></li>
+<li class="chapter" data-level="5" data-path="comparing-samplers.html"><a href="comparing-samplers.html"><i class="fa fa-check"></i><b>5</b> Comparing samplers</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="comparing-samplers.html"><a href="comparing-samplers.html#metropolis-in-gibbs"><i class="fa fa-check"></i><b>5.1</b> Metropolis-in-Gibbs</a></li>
+<li class="chapter" data-level="5.2" data-path="comparing-samplers.html"><a href="comparing-samplers.html#nuts-sampler"><i class="fa fa-check"></i><b>5.2</b> NUTS sampler</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Liesel Tutorials</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="linear-regression" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Linear regression<a href="linear-regression.html#linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this tutorial, we build a linear regression model with Liesel and estimate it with Goose. Our goal is to illustrate the most important features of the software in a straightforward context.</p>
+<div id="model-building-with-liesel" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Model building with Liesel<a href="linear-regression.html#model-building-with-liesel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Liesel is based on the concept of probabilistic graphical models (PGMs) to represent (primarily Bayesian) statistical models, so let’s start with a very brief look at what PGMs are and how they are implemented in Liesel.</p>
+<div id="probabilistic-graphical-models" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Probabilistic graphical models<a href="linear-regression.html#probabilistic-graphical-models" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In a PGM, each variable is represented as a node. There are two basic types of nodes in Liesel: strong and weak nodes. A strong node is a node whose value is defined “outside” of the model, for example, if the node represents some observed data or a parameter (parameters are usually set by an inference algorithm such as an optimizer or sampler). In contrast, a weak node is a node whose value is defined “within” the model, that is, it is a deterministic function of some other nodes. An exp-transformation mapping a real-valued parameter to a positive number, for example, would be a weak node.</p>
+<p>In addition, each node can have an optional probability distribution. The probability density or mass function of the distribution evaluated at the value of the node gives its log-probability. In a typical Bayesian regression model, the response node would have a normal distribution and the parameter nodes would have some prior distribution (for example, a normal-inverse-gamma prior). The following table shows the different node types and some examples of their use cases.</p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="28%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Strong node</strong></th>
+<th><strong>Weak node</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>With distribution</strong></td>
+<td>Response, parameter, …</td>
+<td>Copula, …</td>
+</tr>
+<tr class="even">
+<td><strong>Without distribution</strong></td>
+<td>Covariate, hyperparameter, …</td>
+<td>Inverse link function, parameter transformation, …</td>
+</tr>
+</tbody>
+</table>
+<p>A PGM is essentially a collection of connected nodes. Two nodes can be connected through a directed edge, meaning that the first node is an input for the value or the distribution of the second node. Nodes <em>without</em> an edge between them are assumed to be conditionally independent, allowing us to factorize the model log-probability as</p>
+<p><span class="math display">\[\log p(\text{Model}) = \sum_{\text{Node $\in$ Model}} \log p(\text{Node} \mid \text{Inputs}(\text{Node})).\]</span></p>
+</div>
+<div id="generating-the-data" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Generating the data<a href="linear-regression.html#generating-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before we can generate the data and build the model graph, we need to load Liesel and a number of other packages. We usually import the model building library <code>liesel.liesel</code> as <code>lsl</code>, and the MCMC library <code>liesel.goose</code> as <code>gs</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="linear-regression.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span>
+<span id="cb1-2"><a href="linear-regression.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
+<span id="cb1-3"><a href="linear-regression.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> liesel.goose <span class="im">as</span> gs</span>
+<span id="cb1-4"><a href="linear-regression.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> liesel.liesel <span class="im">as</span> lsl</span>
+<span id="cb1-5"><a href="linear-regression.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="linear-regression.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-7"><a href="linear-regression.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> liesel.liesel.goose <span class="im">import</span> make_log_prob_fn</span>
+<span id="cb1-8"><a href="linear-regression.html#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="linear-regression.html#cb1-9" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span></code></pre></div>
+<p>Now we can simulate 500 observations from the linear regression model <span class="math inline">\(y_i \sim \mathcal{N}(\beta_0 + \beta_1 x_i, \;\sigma^2)\)</span> with the true parameters <span class="math inline">\(\boldsymbol{\beta} = (\beta_0, \beta_1)&#39; = (1, 2)&#39;\)</span> and <span class="math inline">\(\sigma = 1\)</span>. The relationship between the response <span class="math inline">\(y_i\)</span> and the covariate <span class="math inline">\(x_i\)</span> is visualized in the following scatterplot.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="linear-regression.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size and true parameters</span></span>
+<span id="cb2-2"><a href="linear-regression.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="linear-regression.html#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb2-4"><a href="linear-regression.html#cb2-4" aria-hidden="true" tabindex="-1"></a>true_beta <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>])</span>
+<span id="cb2-5"><a href="linear-regression.html#cb2-5" aria-hidden="true" tabindex="-1"></a>true_sigma <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb2-6"><a href="linear-regression.html#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="linear-regression.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># data-generating process</span></span>
+<span id="cb2-8"><a href="linear-regression.html#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="linear-regression.html#cb2-9" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> rng.uniform(size<span class="op">=</span>n)</span>
+<span id="cb2-10"><a href="linear-regression.html#cb2-10" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack([np.ones(n), x0])</span>
+<span id="cb2-11"><a href="linear-regression.html#cb2-11" aria-hidden="true" tabindex="-1"></a>eps <span class="op">=</span> rng.normal(scale<span class="op">=</span>true_sigma, size<span class="op">=</span>n)</span>
+<span id="cb2-12"><a href="linear-regression.html#cb2-12" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> X <span class="op">@</span> true_beta <span class="op">+</span> eps</span>
+<span id="cb2-13"><a href="linear-regression.html#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="linear-regression.html#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the simulated data</span></span>
+<span id="cb2-15"><a href="linear-regression.html#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="linear-regression.html#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.scatter(x0, y)</span>
+<span id="cb2-17"><a href="linear-regression.html#cb2-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Simulated data from the linear regression model&quot;</span>)</span>
+<span id="cb2-18"><a href="linear-regression.html#cb2-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Covariate x&quot;</span>)</span>
+<span id="cb2-19"><a href="linear-regression.html#cb2-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Response y&quot;</span>)</span>
+<span id="cb2-20"><a href="linear-regression.html#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="building-the-model-graph" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Building the model graph<a href="linear-regression.html#building-the-model-graph" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The graph of a Bayesian linear regression model is a tree, where the hyperparameters of the prior are the leaves and the response is the root. To build this tree in Liesel, we need to start from the leaves and work our way down to the root. Let’s assume the weakly informative prior <span class="math inline">\(\beta_0, \beta_1 \sim \mathcal{N}(0, 100)\)</span> for the regression coefficients. To encode this assumption in Liesel, we need to create two hyperparameter nodes (<code>lsl.Hyperparameter</code>) for the mean and the standard deviation of the normal prior. Setting a name when creating a node is optional but helps to identify it later.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="linear-regression.html#cb3-1" aria-hidden="true" tabindex="-1"></a>n_beta_loc <span class="op">=</span> lsl.Hyperparameter(<span class="fl">0.0</span>, name<span class="op">=</span><span class="st">&quot;beta_loc&quot;</span>)</span>
+<span id="cb3-2"><a href="linear-regression.html#cb3-2" aria-hidden="true" tabindex="-1"></a>n_beta_scale <span class="op">=</span> lsl.Hyperparameter(<span class="fl">100.0</span>, name<span class="op">=</span><span class="st">&quot;beta_scale&quot;</span>)</span>
+<span id="cb3-3"><a href="linear-regression.html#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="linear-regression.html#cb3-4" aria-hidden="true" tabindex="-1"></a>n_beta_loc</span></code></pre></div>
+<pre><code>## Hyperparameter(Node(0.0, name=&#39;beta_loc&#39;))</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="linear-regression.html#cb5-1" aria-hidden="true" tabindex="-1"></a>n_beta_scale</span></code></pre></div>
+<pre><code>## Hyperparameter(Node(100.0, name=&#39;beta_scale&#39;))</code></pre>
+<p>Now, let’s create the node for the regression coefficients (<code>lsl.RegressionCoef</code>). To do so, we need to define its initial value and its node distribution (<code>lsl.NodeDistribution</code>). Here, the node distribution is initialized with three arguments: a string identifying <a href="https://www.tensorflow.org/probability/api_docs/python/tfp/distributions/Normal">the normal distribution in TensorFlow Probability (TFP)</a>, and the nodes representing its parameters (the mean parameter is called <code>loc</code> in TFP, and the standard deviation parameter is called <code>scale</code>).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="linear-regression.html#cb7-1" aria-hidden="true" tabindex="-1"></a>n_beta <span class="op">=</span> lsl.RegressionCoef(</span>
+<span id="cb7-2"><a href="linear-regression.html#cb7-2" aria-hidden="true" tabindex="-1"></a>    value<span class="op">=</span>np.array([<span class="fl">0.0</span>, <span class="fl">0.0</span>]),</span>
+<span id="cb7-3"><a href="linear-regression.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    distribution<span class="op">=</span>lsl.NodeDistribution(<span class="st">&quot;Normal&quot;</span>, loc<span class="op">=</span>n_beta_loc, scale<span class="op">=</span>n_beta_scale),</span>
+<span id="cb7-4"><a href="linear-regression.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">&quot;beta&quot;</span>,</span>
+<span id="cb7-5"><a href="linear-regression.html#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="linear-regression.html#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="linear-regression.html#cb7-7" aria-hidden="true" tabindex="-1"></a>n_beta</span></code></pre></div>
+<pre><code>## RegressionCoef(Node(array(...), NodeDistribution(&#39;Normal&#39;, loc=Hyperparameter(..., name=&#39;beta_loc&#39;), scale=Hyperparameter(..., name=&#39;beta_scale&#39;)), name=&#39;beta&#39;))</code></pre>
+<p>The second branch of the tree is for the residual standard deviation. We build it in a similar way, but this time, using the weakly informative prior <span class="math inline">\(\sigma \sim IG(0.01, 0.01)\)</span> and the <code>lsl.Parameter</code> class instead of the <code>lsl.RegressionCoef</code> class. By the way, the regression coefficient class is a subclass of the parameter class and behaves exactly the same, but it describes the role of the regression coefficients in the model more precisely.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="linear-regression.html#cb9-1" aria-hidden="true" tabindex="-1"></a>n_sigma_a <span class="op">=</span> lsl.Hyperparameter(<span class="fl">0.01</span>, name<span class="op">=</span><span class="st">&quot;a&quot;</span>)</span>
+<span id="cb9-2"><a href="linear-regression.html#cb9-2" aria-hidden="true" tabindex="-1"></a>n_sigma_b <span class="op">=</span> lsl.Hyperparameter(<span class="fl">0.01</span>, name<span class="op">=</span><span class="st">&quot;b&quot;</span>)</span>
+<span id="cb9-3"><a href="linear-regression.html#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="linear-regression.html#cb9-4" aria-hidden="true" tabindex="-1"></a>n_sigma <span class="op">=</span> lsl.Parameter(</span>
+<span id="cb9-5"><a href="linear-regression.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    value<span class="op">=</span><span class="fl">10.0</span>,</span>
+<span id="cb9-6"><a href="linear-regression.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    distribution<span class="op">=</span>lsl.NodeDistribution(</span>
+<span id="cb9-7"><a href="linear-regression.html#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;InverseGamma&quot;</span>, concentration<span class="op">=</span>n_sigma_a, scale<span class="op">=</span>n_sigma_b</span>
+<span id="cb9-8"><a href="linear-regression.html#cb9-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb9-9"><a href="linear-regression.html#cb9-9" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">&quot;sigma&quot;</span>,</span>
+<span id="cb9-10"><a href="linear-regression.html#cb9-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-11"><a href="linear-regression.html#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="linear-regression.html#cb9-12" aria-hidden="true" tabindex="-1"></a>n_sigma</span></code></pre></div>
+<pre><code>## Parameter(Node(10.0, NodeDistribution(&#39;InverseGamma&#39;, concentration=Hyperparameter(..., name=&#39;a&#39;), scale=Hyperparameter(..., name=&#39;b&#39;)), name=&#39;sigma&#39;))</code></pre>
+<p>All nodes we have seen so far are strong nodes. Before we can create a weak node that computes the predictions <span class="math inline">\(\hat{\boldsymbol{y}} = \mathbf{X}\boldsymbol{\beta}\)</span>, we need to set up one more strong node for the design matrix (<code>lsl.DesignMatrix</code>). To compute the matrix-vector product <span class="math inline">\(\hat{\boldsymbol{y}} = \mathbf{X}\boldsymbol{\beta}\)</span>, we can use a weak smooth node (<code>lsl.Smooth</code>). Liesel comes with a number of default weak nodes, but the user can also implement their own specialized weak nodes.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="linear-regression.html#cb11-1" aria-hidden="true" tabindex="-1"></a>n_X <span class="op">=</span> lsl.DesignMatrix(X, name<span class="op">=</span><span class="st">&quot;X&quot;</span>)</span>
+<span id="cb11-2"><a href="linear-regression.html#cb11-2" aria-hidden="true" tabindex="-1"></a>n_y_hat <span class="op">=</span> lsl.Smooth(n_X, n_beta, name<span class="op">=</span><span class="st">&quot;y_hat&quot;</span>)</span>
+<span id="cb11-3"><a href="linear-regression.html#cb11-3" aria-hidden="true" tabindex="-1"></a>n_y_hat</span></code></pre></div>
+<pre><code>## Smooth(Node(SmoothCalculator(x=DesignMatrix(..., name=&#39;X&#39;), ...), name=&#39;y_hat&#39;))</code></pre>
+<p>Finally, we can connect the branches of the tree in a response node (<code>lsl.Response</code>). The value of the node is the simulated response vector, the node <code>n_y_hat</code> represents the mean, and <code>n_sigma</code> the standard deviation of the node distribution.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="linear-regression.html#cb13-1" aria-hidden="true" tabindex="-1"></a>n_y <span class="op">=</span> lsl.Response(</span>
+<span id="cb13-2"><a href="linear-regression.html#cb13-2" aria-hidden="true" tabindex="-1"></a>    value<span class="op">=</span>y,</span>
+<span id="cb13-3"><a href="linear-regression.html#cb13-3" aria-hidden="true" tabindex="-1"></a>    distribution<span class="op">=</span>lsl.NodeDistribution(<span class="st">&quot;Normal&quot;</span>, loc<span class="op">=</span>n_y_hat, scale<span class="op">=</span>n_sigma),</span>
+<span id="cb13-4"><a href="linear-regression.html#cb13-4" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">&quot;y&quot;</span>,</span>
+<span id="cb13-5"><a href="linear-regression.html#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="linear-regression.html#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="linear-regression.html#cb13-7" aria-hidden="true" tabindex="-1"></a>n_y</span></code></pre></div>
+<pre><code>## Response(Node(array(...), NodeDistribution(&#39;Normal&#39;, loc=Smooth(..., name=&#39;y_hat&#39;), scale=Parameter(..., name=&#39;sigma&#39;)), name=&#39;y&#39;))</code></pre>
+<p>The easiest way to combine several nodes in a model object is using the model builder (<code>lsl.ModelBuilder</code>). Nodes can be added step by step to the builder. Here, we are only adding the response node, but the builder takes care of adding all missing direct or indirect inputs to the model when the <code>build()</code> method is called. The model that is returned by the builder provides a couple of convenience function, for example, to evaluate the model log-probability, or to update the nodes in a topological order.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="linear-regression.html#cb15-1" aria-hidden="true" tabindex="-1"></a>mb <span class="op">=</span> lsl.ModelBuilder()</span>
+<span id="cb15-2"><a href="linear-regression.html#cb15-2" aria-hidden="true" tabindex="-1"></a>mb.add_nodes(n_y)</span></code></pre></div>
+<pre><code>## ModelBuilder([Response(..., name=&#39;y&#39;), Parameter(..., name=&#39;sigma&#39;), Smooth(..., name=&#39;y_hat&#39;), ...])</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="linear-regression.html#cb17-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> mb.build()</span>
+<span id="cb17-2"><a href="linear-regression.html#cb17-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<pre><code>## Model([Hyperparameter(..., name=&#39;a&#39;), Hyperparameter(..., name=&#39;b&#39;), DesignMatrix(..., name=&#39;X&#39;), ...])</code></pre>
+<p>The <code>lsl.plot_model()</code> function visualizes the graph of a model. Strong nodes are shown in blue, weak nodes in red. Nodes with a probability distribution are highlighted with a star. In the figure below, we can see the tree-like structure of the graph and identify the two branches for the mean and the standard deviation of the response. By the way, if the layout of the graph looks messy for you, please make sure you have the <code>pygraphviz</code> package installed.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="linear-regression.html#cb19-1" aria-hidden="true" tabindex="-1"></a>lsl.plot_model(model)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-10-3.png" width="1920" /></p>
+</div>
+<div id="node-and-model-log-probabilities" class="section level3 hasAnchor" number="2.1.4">
+<h3><span class="header-section-number">2.1.4</span> Node and model log-probabilities<a href="linear-regression.html#node-and-model-log-probabilities" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The log-probability of the model, which can be interpreted as the (unnormalized) log-posterior in a Bayesian context, can be accessed with the <code>log_prob</code> property.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="linear-regression.html#cb20-1" aria-hidden="true" tabindex="-1"></a>model.log_prob</span></code></pre></div>
+<pre><code>## -1641.434182772623</code></pre>
+<p>The individual nodes also have a <code>log_prob</code> property. In fact, because of the conditional independence assumption of the model, the log-probability of the model is given by the sum of the log-probabilities of the nodes with probability distributions.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="linear-regression.html#cb22-1" aria-hidden="true" tabindex="-1"></a>n_beta.log_prob <span class="op">+</span> n_sigma.log_prob <span class="op">+</span> n_y.log_prob</span></code></pre></div>
+<pre><code>## -1641.434182772623</code></pre>
+<p>Nodes without a probability distribution return a log-probability of zero.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="linear-regression.html#cb24-1" aria-hidden="true" tabindex="-1"></a>n_beta_loc.log_prob</span></code></pre></div>
+<pre><code>## 0.0</code></pre>
+<p>The log-probability of a node depends on its value and its inputs. Thus, if we change the standard deviation of the response from 10 to 1, the log-probability of the corresponding node, the log-probability of the response node, and the log-probability of the model change as well.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="linear-regression.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Old value of sigma: </span><span class="sc">{</span>n_sigma<span class="sc">.</span>value<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## Old value of sigma: 10.0</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="linear-regression.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Old log-prob of sigma: </span><span class="sc">{</span>n_sigma<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## Old log-prob of sigma: -6.9721421531563434</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="linear-regression.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Old log-prob of y: </span><span class="sc">{</span>n_y<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## Old log-prob of y: -1623.4138228460292</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="linear-regression.html#cb32-1" aria-hidden="true" tabindex="-1"></a>n_sigma.value <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb32-2"><a href="linear-regression.html#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="linear-regression.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;New value of sigma: </span><span class="sc">{</span>n_sigma<span class="sc">.</span>value<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## New value of sigma: 1.0</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="linear-regression.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;New log-prob of sigma: </span><span class="sc">{</span>n_sigma<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## New log-prob of sigma: -4.6555311772972345</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="linear-regression.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;New log-prob of y: </span><span class="sc">{</span>n_y<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## New log-prob of y: -1724.670241269328</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="linear-regression.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;New model log-prob: </span><span class="sc">{</span>model<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## New model log-prob: -1740.3739902200628</code></pre>
+<p>For most inference algorithms, we need the gradient of the model log-probability with respect to the parameters. Liesel uses <a href="https://github.com/google/jax">the JAX library for numerical computing and machine learning</a> to compute gradients using automatic differentiation. The gradient with respect to the standard deviation of the response can be computed with the <code>grad()</code> method of the corresponding node.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="linear-regression.html#cb40-1" aria-hidden="true" tabindex="-1"></a>n_sigma.grad()</span></code></pre></div>
+<pre><code>## array(2029.4019, dtype=float32)
+## 
+## INFO - Unable to initialize backend &#39;tpu_driver&#39;: NOT_FOUND: Unable to find driver in registry given worker: 
+## INFO - Unable to initialize backend &#39;gpu&#39;: NOT_FOUND: Could not find registered platform with name: &quot;cuda&quot;. Available platform names are: Host Interpreter
+## INFO - Unable to initialize backend &#39;tpu&#39;: INVALID_ARGUMENT: TpuPlatform is not available.
+## WARNING - No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)</code></pre>
+</div>
+<div id="pure-stateless-jax-functions" class="section level3 hasAnchor" number="2.1.5">
+<h3><span class="header-section-number">2.1.5</span> Pure, stateless JAX functions<a href="linear-regression.html#pure-stateless-jax-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Liesel’s nodes are stateful, that is, their state consisting of the value and the log-probability are stored in the object. The state of a node can be accessed with the <code>state</code> property, which returns a named tuple.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="linear-regression.html#cb42-1" aria-hidden="true" tabindex="-1"></a>n_beta.state</span></code></pre></div>
+<pre><code>## NodeState(value=array([0., 0.]), log_prob=-11.0482177734375)</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="linear-regression.html#cb44-1" aria-hidden="true" tabindex="-1"></a>n_sigma.state</span></code></pre></div>
+<pre><code>## NodeState(value=1.0, log_prob=-4.6555311772972345)</code></pre>
+<p>The state of a model is defined as a dictionary of node states. The dictionary keys correspond to the node names.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="linear-regression.html#cb46-1" aria-hidden="true" tabindex="-1"></a>model.state.keys()</span></code></pre></div>
+<pre><code>## dict_keys([&#39;a&#39;, &#39;b&#39;, &#39;X&#39;, &#39;beta_scale&#39;, &#39;beta_loc&#39;, &#39;sigma&#39;, &#39;beta&#39;, &#39;y_hat&#39;, &#39;y&#39;])</code></pre>
+<p>At first, the stateful Liesel objects seem incompatible with JAX’ pure functional programming paradigm (JAX’ <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">“anima di pura programmazione funzionale”</a>), but it is possible to separate the math and the data that are stored in the objects to use them with JAX. We have already seen how to extract the state, that is, the data from the model, so now we need to generate a pure, stateless function that computes the log-probability from the model state.</p>
+<p>The function <code>liesel.liesel.goose.make_log_prob_fn()</code> serves this exact purpose. The returned log-probability function requires two arguments: the model state as the second argument, and a position, that is, a subset of the model state defining with respect to which nodes the log-probability is evaluated, as the first argument. The position is important when computing the derivatives of the log-probability.</p>
+<p>Usually, the user doesn’t need to import or use the <code>make_log_prob_fn()</code> function, because the MCMC framework Goose hides this level of complexity, but it is important for a good understanding of the Liesel internals.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="linear-regression.html#cb48-1" aria-hidden="true" tabindex="-1"></a>model.jaxify()</span></code></pre></div>
+<pre><code>## Model([Hyperparameter(..., name=&#39;a&#39;), Hyperparameter(..., name=&#39;b&#39;), DesignMatrix(..., name=&#39;X&#39;), ...])</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="linear-regression.html#cb50-1" aria-hidden="true" tabindex="-1"></a>log_prob_fn <span class="op">=</span> make_log_prob_fn(model)</span>
+<span id="cb50-2"><a href="linear-regression.html#cb50-2" aria-hidden="true" tabindex="-1"></a>log_prob_fn({<span class="st">&quot;sigma&quot;</span>: <span class="fl">1.0</span>}, model.state)</span></code></pre></div>
+<pre><code>## DeviceArray(-1740.374, dtype=float32)</code></pre>
+<p>Now we can use the functions <code>jax.grad()</code> and <code>jax.hessian()</code> to compute the first and second derivatives of the log-probability function with respect to the residual standard deviation.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="linear-regression.html#cb52-1" aria-hidden="true" tabindex="-1"></a>grad_fn <span class="op">=</span> jax.grad(log_prob_fn)</span>
+<span id="cb52-2"><a href="linear-regression.html#cb52-2" aria-hidden="true" tabindex="-1"></a>grad_fn({<span class="st">&quot;sigma&quot;</span>: <span class="fl">1.0</span>}, model.state)</span></code></pre></div>
+<pre><code>## {&#39;sigma&#39;: DeviceArray(2029.4019, dtype=float32, weak_type=True)}</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="linear-regression.html#cb54-1" aria-hidden="true" tabindex="-1"></a>hessian_fn <span class="op">=</span> jax.hessian(log_prob_fn)</span>
+<span id="cb54-2"><a href="linear-regression.html#cb54-2" aria-hidden="true" tabindex="-1"></a>hessian_fn({<span class="st">&quot;sigma&quot;</span>: <span class="fl">1.0</span>}, model.state)</span></code></pre></div>
+<pre><code>## {&#39;sigma&#39;: {&#39;sigma&#39;: DeviceArray(-7090.2163, dtype=float32, weak_type=True)}}</code></pre>
+<p>JAX does not only support automatic differentiation but also vectorization, parallelization, and just-in-time (JIT) compilation. If you haven’t used JAX before, we highly recommend trying it out.</p>
+</div>
+</div>
+<div id="mcmc-inference-with-goose" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> MCMC inference with Goose<a href="linear-regression.html#mcmc-inference-with-goose" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This section illustrates the key features of Liesel’s MCMC framework Goose. To use Goose, the user needs to select one or more sampling algorithms, called (transition) kernels, for the model parameters. Goose comes with a number of standard kernels such as Hamiltonian Monte Carlo (<code>gs.HMCKernel</code>) or the No U-Turn Sampler (<code>gs.NUTSKernel</code>). Multiple kernels can be combined in one sampling scheme and assigned to different parameters, and the user can implement their own problem-specific kernels, as long as they are compatible with the <code>liesel.goose.kernel.Kernel</code> protocol. In any case, the user is responsible for constructing a <em>mathematically valid</em> algorithm.</p>
+<p>We start with a very simple sampling scheme, keeping <span class="math inline">\(\sigma\)</span> fixed at the true value and using a NUTS sampler for <span class="math inline">\(\boldsymbol{\beta}\)</span>. The kernels are added to a <code>gs.Engine</code>, which coordinates the sampling, including the kernel tuning during the warmup, and the MCMC bookkeeping. The engine can be configured step by step with a <code>gs.EngineBuilder</code>. We need to inform the builder about the model, the initial values, the kernels, and the sampling duration. Finally, we can call the <code>build()</code> method, which returns a fully configured engine.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb56-1"><a href="linear-regression.html#cb56-1" aria-hidden="true" tabindex="-1"></a>n_sigma.value <span class="op">=</span> true_sigma</span>
+<span id="cb56-2"><a href="linear-regression.html#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="linear-regression.html#cb56-3" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> gs.EngineBuilder(seed<span class="op">=</span><span class="dv">1337</span>, num_chains<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb56-4"><a href="linear-regression.html#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="linear-regression.html#cb56-5" aria-hidden="true" tabindex="-1"></a>builder.set_model(lsl.GooseModel(model))</span>
+<span id="cb56-6"><a href="linear-regression.html#cb56-6" aria-hidden="true" tabindex="-1"></a>builder.set_initial_values(model.state)</span>
+<span id="cb56-7"><a href="linear-regression.html#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="linear-regression.html#cb56-8" aria-hidden="true" tabindex="-1"></a>builder.add_kernel(gs.NUTSKernel([<span class="st">&quot;beta&quot;</span>]))</span>
+<span id="cb56-9"><a href="linear-regression.html#cb56-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-10"><a href="linear-regression.html#cb56-10" aria-hidden="true" tabindex="-1"></a>builder.set_duration(warmup_duration<span class="op">=</span><span class="dv">1000</span>, posterior_duration<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb56-11"><a href="linear-regression.html#cb56-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-12"><a href="linear-regression.html#cb56-12" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> builder.build()</span></code></pre></div>
+<p>Now we can run the MCMC algorithm for the specified duration by calling the <code>sample_all_epochs()</code> method on the engine. In a first step, the model and the sampling algorithm are compiled, so don’t worry if you don’t see an output right away. The subsequent samples will be generated much faster. Finally, we can extract the results and print a summary table.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="linear-regression.html#cb57-1" aria-hidden="true" tabindex="-1"></a>engine.sample_all_epochs()</span></code></pre></div>
+<pre><code>## INFO - Starting epoch: FAST_ADAPTATION, 75 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 4, 4, 3, 2 / 75 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 2, 3, 1, 1 / 25 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 2, 3, 1, 1 / 50 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 2, 0, 2, 1 / 100 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 4, 2, 2, 1 / 200 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 4, 1, 4, 1 / 500 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 2, 2, 2 / 50 transitions
+## INFO - Finished epoch
+## INFO - Finished warmup
+## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
+## INFO - Finished epoch</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="linear-regression.html#cb59-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
+<span id="cb59-2"><a href="linear-regression.html#cb59-2" aria-hidden="true" tabindex="-1"></a>gs.Summary.from_result(results)</span></code></pre></div>
+<table border="0" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>var_index</th>
+      <th>sample_size</th>
+      <th>mean</th>
+      <th>var</th>
+      <th>sd</th>
+      <th>rhat</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>q_0.05</th>
+      <th>q_0.5</th>
+      <th>q_0.95</th>
+      <th>hdi_low</th>
+      <th>hdi_high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta</th>
+      <td>(0,)</td>
+      <td>4000</td>
+      <td>0.98041</td>
+      <td>0.00768</td>
+      <td>0.08764</td>
+      <td>1.00204</td>
+      <td>1063.82262</td>
+      <td>1309.64174</td>
+      <td>0.00269</td>
+      <td>0.00191</td>
+      <td>0.83539</td>
+      <td>0.9814</td>
+      <td>1.12654</td>
+      <td>0.84162</td>
+      <td>1.13003</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>(1,)</td>
+      <td>4000</td>
+      <td>1.91613</td>
+      <td>0.02302</td>
+      <td>0.15173</td>
+      <td>1.0043</td>
+      <td>1100.8744</td>
+      <td>1152.45592</td>
+      <td>0.00459</td>
+      <td>0.00326</td>
+      <td>1.66434</td>
+      <td>1.91723</td>
+      <td>2.16965</td>
+      <td>1.69189</td>
+      <td>2.19485</td>
+    </tr>
+  </tbody>
+</table>
+<p>If we need more samples, we can append another epoch to the engine and sample it by calling either the <code>sample_next_epoch()</code> or the <code>sample_all_epochs()</code> method. The epochs are described by <code>gs.EpochConfig</code> objects.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb60-1"><a href="linear-regression.html#cb60-1" aria-hidden="true" tabindex="-1"></a>engine.append_epoch(</span>
+<span id="cb60-2"><a href="linear-regression.html#cb60-2" aria-hidden="true" tabindex="-1"></a>    gs.EpochConfig(gs.EpochType.POSTERIOR, duration<span class="op">=</span><span class="dv">1000</span>, thinning<span class="op">=</span><span class="dv">1</span>, optional<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb60-3"><a href="linear-regression.html#cb60-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-4"><a href="linear-regression.html#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="linear-regression.html#cb60-5" aria-hidden="true" tabindex="-1"></a>engine.sample_next_epoch()</span></code></pre></div>
+<pre><code>## INFO - Finished warmup
+## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
+## INFO - Finished epoch</code></pre>
+<p>No compilation is required at this point, so this is pretty fast.</p>
+<div id="using-a-gibbs-kernel" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Using a Gibbs kernel<a href="linear-regression.html#using-a-gibbs-kernel" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using a Gibbs kernel is a bit more complicated, because Goose doesn’t automatically derive the full conditional from the model graph. Hence, the user needs to provide a function to sample from the full conditional. The function needs to accept a PRNG state and a model state as arguments, and it needs to return a dictionary with the node name as the key and the new node value as the value. We could also update multiple parameters with one Gibbs kernel if we returned a dictionary of length two or more.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb62-1"><a href="linear-regression.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_sigma(prng_key, model_state):</span>
+<span id="cb62-2"><a href="linear-regression.html#cb62-2" aria-hidden="true" tabindex="-1"></a>    a_prior <span class="op">=</span> model_state[<span class="st">&quot;a&quot;</span>].value</span>
+<span id="cb62-3"><a href="linear-regression.html#cb62-3" aria-hidden="true" tabindex="-1"></a>    b_prior <span class="op">=</span> model_state[<span class="st">&quot;b&quot;</span>].value</span>
+<span id="cb62-4"><a href="linear-regression.html#cb62-4" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(model_state[<span class="st">&quot;y&quot;</span>].value)</span>
+<span id="cb62-5"><a href="linear-regression.html#cb62-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-6"><a href="linear-regression.html#cb62-6" aria-hidden="true" tabindex="-1"></a>    resid <span class="op">=</span> model_state[<span class="st">&quot;y&quot;</span>].value <span class="op">-</span> model_state[<span class="st">&quot;y_hat&quot;</span>].value</span>
+<span id="cb62-7"><a href="linear-regression.html#cb62-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-8"><a href="linear-regression.html#cb62-8" aria-hidden="true" tabindex="-1"></a>    a_gibbs <span class="op">=</span> a_prior <span class="op">+</span> n <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb62-9"><a href="linear-regression.html#cb62-9" aria-hidden="true" tabindex="-1"></a>    b_gibbs <span class="op">=</span> b_prior <span class="op">+</span> jnp.<span class="bu">sum</span>(resid<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb62-10"><a href="linear-regression.html#cb62-10" aria-hidden="true" tabindex="-1"></a>    draw <span class="op">=</span> b_gibbs <span class="op">/</span> jax.random.gamma(prng_key, a_gibbs)</span>
+<span id="cb62-11"><a href="linear-regression.html#cb62-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;sigma&quot;</span>: draw}</span></code></pre></div>
+<p>We build the engine in a similar way as before, but this time adding the Gibbs kernel as well.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb63-1"><a href="linear-regression.html#cb63-1" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> gs.EngineBuilder(seed<span class="op">=</span><span class="dv">1338</span>, num_chains<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb63-2"><a href="linear-regression.html#cb63-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="linear-regression.html#cb63-3" aria-hidden="true" tabindex="-1"></a>builder.set_model(lsl.GooseModel(model))</span>
+<span id="cb63-4"><a href="linear-regression.html#cb63-4" aria-hidden="true" tabindex="-1"></a>builder.set_initial_values(model.state)</span>
+<span id="cb63-5"><a href="linear-regression.html#cb63-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="linear-regression.html#cb63-6" aria-hidden="true" tabindex="-1"></a>builder.add_kernel(gs.NUTSKernel([<span class="st">&quot;beta&quot;</span>]))</span>
+<span id="cb63-7"><a href="linear-regression.html#cb63-7" aria-hidden="true" tabindex="-1"></a>builder.add_kernel(gs.GibbsKernel([<span class="st">&quot;sigma&quot;</span>], draw_sigma))</span>
+<span id="cb63-8"><a href="linear-regression.html#cb63-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-9"><a href="linear-regression.html#cb63-9" aria-hidden="true" tabindex="-1"></a>builder.set_duration(warmup_duration<span class="op">=</span><span class="dv">1000</span>, posterior_duration<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb63-10"><a href="linear-regression.html#cb63-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-11"><a href="linear-regression.html#cb63-11" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> builder.build()</span>
+<span id="cb63-12"><a href="linear-regression.html#cb63-12" aria-hidden="true" tabindex="-1"></a>engine.sample_all_epochs()</span></code></pre></div>
+<pre><code>## INFO - Starting epoch: FAST_ADAPTATION, 75 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 2, 5, 2, 4 / 75 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 1, 3, 1 / 25 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 0, 2, 2, 1 / 50 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 2, 1, 1 / 100 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 4, 3, 1, 1 / 200 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 2, 4, 1, 3 / 500 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 2, 1, 1, 2 / 50 transitions
+## INFO - Finished epoch
+## INFO - Finished warmup
+## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
+## INFO - Finished epoch</code></pre>
+<p>Goose provides a couple of convenient numerical and graphical summary tools. The <code>gs.Summary</code> class computes several summary statistics that can be either accessed programmatically or displayed as a summary table.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb65-1"><a href="linear-regression.html#cb65-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
+<span id="cb65-2"><a href="linear-regression.html#cb65-2" aria-hidden="true" tabindex="-1"></a>gs.Summary.from_result(results)</span></code></pre></div>
+<table border="0" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>var_index</th>
+      <th>sample_size</th>
+      <th>mean</th>
+      <th>var</th>
+      <th>sd</th>
+      <th>rhat</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>q_0.05</th>
+      <th>q_0.5</th>
+      <th>q_0.95</th>
+      <th>hdi_low</th>
+      <th>hdi_high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta</th>
+      <td>(0,)</td>
+      <td>4000</td>
+      <td>0.98289</td>
+      <td>0.00914</td>
+      <td>0.09562</td>
+      <td>1.00664</td>
+      <td>1051.48282</td>
+      <td>1139.81108</td>
+      <td>0.00294</td>
+      <td>0.00208</td>
+      <td>0.82103</td>
+      <td>0.98308</td>
+      <td>1.1403</td>
+      <td>0.83559</td>
+      <td>1.15215</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>(1,)</td>
+      <td>4000</td>
+      <td>1.90942</td>
+      <td>0.02813</td>
+      <td>0.16771</td>
+      <td>1.00552</td>
+      <td>1027.67875</td>
+      <td>1075.49258</td>
+      <td>0.00525</td>
+      <td>0.00376</td>
+      <td>1.63428</td>
+      <td>1.90844</td>
+      <td>2.18775</td>
+      <td>1.61733</td>
+      <td>2.16349</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>()</td>
+      <td>4000</td>
+      <td>1.04369</td>
+      <td>0.00429</td>
+      <td>0.06551</td>
+      <td>1.0004</td>
+      <td>3816.93553</td>
+      <td>3698.17721</td>
+      <td>0.00106</td>
+      <td>0.00075</td>
+      <td>0.94177</td>
+      <td>1.04151</td>
+      <td>1.15542</td>
+      <td>0.94167</td>
+      <td>1.1554</td>
+    </tr>
+  </tbody>
+</table>
+<p>The effective sample sizes <code>ess_bulk</code> and <code>ess_tail</code> seem rather low compared to the 4000 MCMC samples. We can plot the trace plots of the chains with <code>gs.plot_trace()</code>.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb66-1"><a href="linear-regression.html#cb66-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_trace(results)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-28-5.png" width="961" /></p>
+<p>We could also take a look at a kernel density estimator with <code>gs.plot_density()</code> and the estimated autocorrelation with <code>gs.plot_cor()</code>. Alternatively, we can output all three diagnostic plots together with <code>gs.plot_param()</code>. The following plot shows the parameter <span class="math inline">\(\beta_0\)</span>.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb67-1"><a href="linear-regression.html#cb67-1" aria-hidden="true" tabindex="-1"></a>gs.plot_param(results, param<span class="op">=</span><span class="st">&quot;beta&quot;</span>, param_index<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-29-7.png" width="864" /></p>
+</div>
+<div id="parameter-transformations" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Parameter transformations<a href="linear-regression.html#parameter-transformations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Maybe the reason for the low effective sample size is the Metropolis-in-Gibbs sampling scheme? Let’s try to sample the full parameter vector <span class="math inline">\((\boldsymbol{\beta}&#39;, \sigma)&#39;\)</span> with a single NUTS kernel instead. Since the standard deviation is a positive-valued parameter, we need to log-transform it to sample it with a NUTS kernel. The model class provides the <code>transform_parameter()</code> method for this purpose. The method returns a deep copy of the model with the transformed parameter.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb68-1"><a href="linear-regression.html#cb68-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> model.transform_parameter(<span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;Log&quot;</span>)</span></code></pre></div>
+<p>The response distribution still requires the standard deviation on the original scale. The model graph shows that the back-transformation from the logarithmic to the original scale is performed by a bijector node (<code>lsl.Bijector</code>) between the transformed standard deviation and the response.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb69-1"><a href="linear-regression.html#cb69-1" aria-hidden="true" tabindex="-1"></a>lsl.plot_model(model)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-31-9.png" width="1920" /></p>
+<p>Now we can set up and run an MCMC algorithm with a NUTS kernel for all parameters.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb70-1"><a href="linear-regression.html#cb70-1" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> gs.EngineBuilder(seed<span class="op">=</span><span class="dv">1339</span>, num_chains<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb70-2"><a href="linear-regression.html#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="linear-regression.html#cb70-3" aria-hidden="true" tabindex="-1"></a>builder.set_model(lsl.GooseModel(model))</span>
+<span id="cb70-4"><a href="linear-regression.html#cb70-4" aria-hidden="true" tabindex="-1"></a>builder.set_initial_values(model.state)</span>
+<span id="cb70-5"><a href="linear-regression.html#cb70-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="linear-regression.html#cb70-6" aria-hidden="true" tabindex="-1"></a>builder.add_kernel(gs.NUTSKernel([<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma_transformed&quot;</span>]))</span>
+<span id="cb70-7"><a href="linear-regression.html#cb70-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-8"><a href="linear-regression.html#cb70-8" aria-hidden="true" tabindex="-1"></a>builder.set_duration(warmup_duration<span class="op">=</span><span class="dv">1000</span>, posterior_duration<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb70-9"><a href="linear-regression.html#cb70-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-10"><a href="linear-regression.html#cb70-10" aria-hidden="true" tabindex="-1"></a><span class="co"># by default, goose only stores the parameters specified in the kernels.</span></span>
+<span id="cb70-11"><a href="linear-regression.html#cb70-11" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s also store the standard deviation on the original scale.</span></span>
+<span id="cb70-12"><a href="linear-regression.html#cb70-12" aria-hidden="true" tabindex="-1"></a>builder.positions_included <span class="op">=</span> [<span class="st">&quot;sigma&quot;</span>]</span>
+<span id="cb70-13"><a href="linear-regression.html#cb70-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-14"><a href="linear-regression.html#cb70-14" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> builder.build()</span>
+<span id="cb70-15"><a href="linear-regression.html#cb70-15" aria-hidden="true" tabindex="-1"></a>engine.sample_all_epochs()</span></code></pre></div>
+<pre><code>## INFO - Starting epoch: FAST_ADAPTATION, 75 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 3, 2, 3, 3 / 75 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 1, 1, 1 / 25 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 1, 1, 2 / 50 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 2, 3, 1 / 100 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 1, 3, 5 / 200 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 2, 2, 3 / 500 transitions
+## INFO - Finished epoch
+## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
+## WARNING - Errors per chain for kernel_00: 1, 3, 2, 1 / 50 transitions
+## INFO - Finished epoch
+## INFO - Finished warmup
+## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
+## INFO - Finished epoch</code></pre>
+<p>Judging from the trace plots, it seems that all chains have converged.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb72-1"><a href="linear-regression.html#cb72-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
+<span id="cb72-2"><a href="linear-regression.html#cb72-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_trace(results)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-33-11.png" width="961" /></p>
+<p>We can also take a look at the summary table, which includes the original <span class="math inline">\(\sigma\)</span> and the transformed <span class="math inline">\(\log(\sigma)\)</span>.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb73-1"><a href="linear-regression.html#cb73-1" aria-hidden="true" tabindex="-1"></a>gs.Summary.from_result(results)</span></code></pre></div>
+<table border="0" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>var_index</th>
+      <th>sample_size</th>
+      <th>mean</th>
+      <th>var</th>
+      <th>sd</th>
+      <th>rhat</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>q_0.05</th>
+      <th>q_0.5</th>
+      <th>q_0.95</th>
+      <th>hdi_low</th>
+      <th>hdi_high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta</th>
+      <td>(0,)</td>
+      <td>4000</td>
+      <td>0.98794</td>
+      <td>0.00861</td>
+      <td>0.09279</td>
+      <td>1.00208</td>
+      <td>1417.49581</td>
+      <td>1913.23942</td>
+      <td>0.00247</td>
+      <td>0.00175</td>
+      <td>0.83604</td>
+      <td>0.98815</td>
+      <td>1.14109</td>
+      <td>0.8263</td>
+      <td>1.13091</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>(1,)</td>
+      <td>4000</td>
+      <td>1.90159</td>
+      <td>0.02653</td>
+      <td>0.16287</td>
+      <td>1.00285</td>
+      <td>1368.17699</td>
+      <td>1601.74044</td>
+      <td>0.0044</td>
+      <td>0.00311</td>
+      <td>1.63251</td>
+      <td>1.89996</td>
+      <td>2.17422</td>
+      <td>1.65834</td>
+      <td>2.19631</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>()</td>
+      <td>4000</td>
+      <td>1.02134</td>
+      <td>0.00108</td>
+      <td>0.0329</td>
+      <td>1.00067</td>
+      <td>2643.27451</td>
+      <td>2331.78642</td>
+      <td>0.00064</td>
+      <td>0.00045</td>
+      <td>0.96774</td>
+      <td>1.02061</td>
+      <td>1.07647</td>
+      <td>0.96369</td>
+      <td>1.07182</td>
+    </tr>
+    <tr>
+      <th>sigma_transformed</th>
+      <td>()</td>
+      <td>4000</td>
+      <td>0.0206</td>
+      <td>0.00104</td>
+      <td>0.03218</td>
+      <td>1.00067</td>
+      <td>2643.30305</td>
+      <td>2331.78642</td>
+      <td>0.00063</td>
+      <td>0.00051</td>
+      <td>-0.03279</td>
+      <td>0.0204</td>
+      <td>0.07369</td>
+      <td>-0.03021</td>
+      <td>0.07564</td>
+    </tr>
+  </tbody>
+</table>
+<p>The effective sample size is higher for <span class="math inline">\(\sigma\)</span> than for <span class="math inline">\(\boldsymbol{\beta}\)</span>. Finally, let’s check the autocorrelation of the samples.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb74-1"><a href="linear-regression.html#cb74-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_cor(results)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-35-13.png" width="961" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="location-scale-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/liesel-devs/liesel-tutorials/edit/main/rmarkdown/02-lin-reg.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+---
+title: "Liesel Tutorials"
+author: "Hannes Riebl, Paul Wiemann"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: book.bib
+url: https://liesel-devs.github.io/liesel-tutorials/
+cover-image: https://avatars.githubusercontent.com/u/53620082
+description: |
+  Tutorial book for the Liesel probabilistic programming framework
+link-citations: yes
+github-repo: liesel-devs/liesel-tutorials
+---
+
+```{r bookdown, include=FALSE}
+bookdown::clean_book(clean = TRUE)
+dir.create(bookdown:::output_path(), recursive = TRUE)
+file.create(bookdown:::output_path(".nojekyll"))
+```
+
+```{r venv, include=FALSE}
+rliesel::use_liesel_venv()
+```
+
+```{python matplotlib, include=FALSE}
+import matplotlib as plt
+
+plt.rcParams.update({"figure.max_open_warning": 0})
+```
+
+```{python pandas, include=FALSE}
+import re
+
+import pandas as pd
+
+
+def format_float(x):
+    return re.sub(r"\.?0*$", "", f"{x:.5f}")
+
+
+pd.set_option("display.float_format", format_float)
+
+pd.set_option("display.max_rows", 30)
+pd.set_option("display.max_columns", 160)
+pd.set_option("display.width", 160)
+
+pd.set_option("display.html.border", 0)
+
+
+def print_df(self):
+    return self.to_markdown()
+
+
+pd.DataFrame.__repr__ = print_df
+```
+
+# About
+
+Welcome to the Liesel tutorial book, which aims to illustrate the features of the Liesel probabilistic programming framework by example.
+
+Liesel's focus is on semi-parametric regression. It includes:
+
+- [**Liesel**](https://github.com/liesel-devs/liesel), a library to express statistical models as Probabilistic Graphical Models (PGMs). Through the PGM representation, the user can build and update models in a natural way.
+- **Goose**, a library to build custom MCMC algorithms with several parameter blocks and MCMC kernels such as the No U-Turn Sampler (NUTS), the Iteratively Weighted Least Squares (IWLS) sampler, or different Gibbs samplers. Goose also takes care of the MCMC bookkeeping and the chain post-processing.
+- [**RLiesel**](https://github.com/liesel-devs/rliesel), an R interface for Liesel which assists the user with the configuration of semi-parametric regression models such as Generalized Additive Models for Location, Scale and Shape (GAMLSS) with different response distributions, spline-based smooth terms and shrinkage priors.
+
+The name "Liesel" is an homage to the [Gänseliesel fountain](https://en.wikipedia.org/wiki/G%C3%A4nseliesel), landmark of Liesel's birth city [Göttingen](https://en.wikipedia.org/wiki/G%C3%B6ttingen).
+
+## Installation
+
+For installation instructions, see the [README](https://github.com/liesel-devs/liesel#installation) in the main repository.
+
+## Further reading
+
+For a scientific discussion of the software, see our paper on arXiv (in preparation). If you are programming with Liesel, the [API documentation](https://liesel-devs.github.io/liesel) might come in handy.
