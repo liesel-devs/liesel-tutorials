@@ -16,3 +16,8 @@ gev-responses
 comparing-samplers
 metropolis-in-gibbs
 nuts-sampler
+reproducibility
+prng-seeding
+gpu-non-determinism
+non-reproducibility-across-systems
+see-also

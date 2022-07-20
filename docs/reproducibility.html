@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Liesel Tutorials</title>
+  <title>Chapter 6 Reproducibility | Liesel Tutorials</title>
   <meta name="description" content="Tutorial book for the Liesel probabilistic programming framework" />
   <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Liesel Tutorials" />
+  <meta property="og:title" content="Chapter 6 Reproducibility | Liesel Tutorials" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="https://avatars.githubusercontent.com/u/53620082" />
   <meta property="og:description" content="Tutorial book for the Liesel probabilistic programming framework" />
   <meta name="github-repo" content="liesel-devs/liesel-tutorials" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Liesel Tutorials" />
+  <meta name="twitter:title" content="Chapter 6 Reproducibility | Liesel Tutorials" />
   
   <meta name="twitter:description" content="Tutorial book for the Liesel probabilistic programming framework" />
   <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/53620082" />
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="comparing-samplers.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -191,18 +191,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="reproducibility" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Reproducibility<a href="reproducibility.html#reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prng-seeding" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> PRNG seeding<a href="reproducibility.html#prng-seeding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Liesel uses <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#random-numbers">JAX’ splittable Threefry counter-based PRNG</a>, which does not have a global state, so you always need to seed it explicitly, for example when initializing an <a href="https://liesel-devs.github.io/liesel/liesel/goose.html#EngineBuilder"><code>liesel.goose.EngineBuilder</code></a>. However, even with the same seed, reproducible results cannot be guaranteed across different systems or even for separate runs of the same program on the same hardware.</p>
+</div>
+<div id="gpu-non-determinism" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> GPU non-determinism<a href="reproducibility.html#gpu-non-determinism" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Floating point operations on GPUs are generally not completely deterministic, and even though JAX takes <a href="https://github.com/google/jax/pull/4824#issuecomment-966514092">some precautions</a> against this surprising behavior, full reproducibility on GPUs should not be assumed. See also <a href="https://github.com/google/jax/blob/gpu-determinism-note/docs/gpu_determinism.rst">this (unmerged) page in the JAX documentation</a>.</p>
+</div>
+<div id="non-reproducibility-across-systems" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Non-reproducibility across systems<a href="reproducibility.html#non-reproducibility-across-systems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://github.com/blackjax-devs/blackjax/issues/181">In our experience</a>, results from Liesel, BlackJAX and JAX may differ across systems, even if the exact same code is run on the CPU. Following <a href="https://mc-stan.org/docs/reference-manual/reproducibility.html">the Stan documentation</a>, we expect reproducibility only on the CPU and only if all of the following components are identical:</p>
+<ul>
+<li>the Liesel version,</li>
+<li>the Python version,</li>
+<li>the versions of all libraries Liesel depends on,</li>
+<li>the operating system version,</li>
+<li>the computer hardware including CPU, motherboard and memory,</li>
+<li>the compilers, including versions, flags and libraries, used to build Python and all libraries Liesel depends on,</li>
+<li>the program, including the seed, initialization and data.</li>
+</ul>
+</div>
+<div id="see-also" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> See also<a href="reproducibility.html#see-also" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><a href="https://pytorch.org/docs/stable/notes/randomness.html">The PyTorch docs on reproducibility</a></li>
+<li><a href="https://mc-stan.org/docs/reference-manual/reproducibility.html">The Stan docs on reproducibility</a></li>
+</ul>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
+<a href="comparing-samplers.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
@@ -234,7 +260,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/liesel-devs/liesel-tutorials/edit/main/%s",
+"link": "https://github.com/liesel-devs/liesel-tutorials/edit/main/rmarkdown/06-reproducibility.Rmd",
 "text": "Edit"
 },
 "history": {

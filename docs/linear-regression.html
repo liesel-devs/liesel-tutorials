@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Linear regression | Liesel Tutorials</title>
   <meta name="description" content="Tutorial book for the Liesel probabilistic programming framework" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Linear regression | Liesel Tutorials" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Hannes Riebl, Paul Wiemann" />
 
 
-<meta name="date" content="2022-06-07" />
+<meta name="date" content="2022-07-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -163,6 +163,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="comparing-samplers.html"><a href="comparing-samplers.html#metropolis-in-gibbs"><i class="fa fa-check"></i><b>5.1</b> Metropolis-in-Gibbs</a></li>
 <li class="chapter" data-level="5.2" data-path="comparing-samplers.html"><a href="comparing-samplers.html#nuts-sampler"><i class="fa fa-check"></i><b>5.2</b> NUTS sampler</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="reproducibility.html"><a href="reproducibility.html"><i class="fa fa-check"></i><b>6</b> Reproducibility</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="reproducibility.html"><a href="reproducibility.html#prng-seeding"><i class="fa fa-check"></i><b>6.1</b> PRNG seeding</a></li>
+<li class="chapter" data-level="6.2" data-path="reproducibility.html"><a href="reproducibility.html#gpu-non-determinism"><i class="fa fa-check"></i><b>6.2</b> GPU non-determinism</a></li>
+<li class="chapter" data-level="6.3" data-path="reproducibility.html"><a href="reproducibility.html#non-reproducibility-across-systems"><i class="fa fa-check"></i><b>6.3</b> Non-reproducibility across systems</a></li>
+<li class="chapter" data-level="6.4" data-path="reproducibility.html"><a href="reproducibility.html#see-also"><i class="fa fa-check"></i><b>6.4</b> See also</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -311,7 +318,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## ModelBuilder([Response(..., name=&#39;y&#39;), Parameter(..., name=&#39;sigma&#39;), Smooth(..., name=&#39;y_hat&#39;), ...])</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="linear-regression.html#cb17-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> mb.build()</span>
 <span id="cb17-2"><a href="linear-regression.html#cb17-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
-<pre><code>## Model([Hyperparameter(..., name=&#39;a&#39;), Hyperparameter(..., name=&#39;b&#39;), DesignMatrix(..., name=&#39;X&#39;), ...])</code></pre>
+<pre><code>## Model([Hyperparameter(..., name=&#39;b&#39;), Hyperparameter(..., name=&#39;a&#39;), DesignMatrix(..., name=&#39;X&#39;), ...])</code></pre>
 <p>The <code>lsl.plot_model()</code> function visualizes the graph of a model. Strong nodes are shown in blue, weak nodes in red. Nodes with a probability distribution are highlighted with a star. In the figure below, we can see the tree-like structure of the graph and identify the two branches for the mean and the standard deviation of the response. By the way, if the layout of the graph looks messy for you, please make sure you have the <code>pygraphviz</code> package installed.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="linear-regression.html#cb19-1" aria-hidden="true" tabindex="-1"></a>lsl.plot_model(model)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-10-3.png" width="1920" /></p>
@@ -320,10 +327,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">2.1.4</span> Node and model log-probabilities<a href="linear-regression.html#node-and-model-log-probabilities" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The log-probability of the model, which can be interpreted as the (unnormalized) log-posterior in a Bayesian context, can be accessed with the <code>log_prob</code> property.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="linear-regression.html#cb20-1" aria-hidden="true" tabindex="-1"></a>model.log_prob</span></code></pre></div>
-<pre><code>## -1641.434182772623</code></pre>
+<pre><code>## -1641.4341827726228</code></pre>
 <p>The individual nodes also have a <code>log_prob</code> property. In fact, because of the conditional independence assumption of the model, the log-probability of the model is given by the sum of the log-probabilities of the nodes with probability distributions.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="linear-regression.html#cb22-1" aria-hidden="true" tabindex="-1"></a>n_beta.log_prob <span class="op">+</span> n_sigma.log_prob <span class="op">+</span> n_y.log_prob</span></code></pre></div>
-<pre><code>## -1641.434182772623</code></pre>
+<pre><code>## -1641.4341827726228</code></pre>
 <p>Nodes without a probability distribution return a log-probability of zero.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="linear-regression.html#cb24-1" aria-hidden="true" tabindex="-1"></a>n_beta_loc.log_prob</span></code></pre></div>
 <pre><code>## 0.0</code></pre>
@@ -333,7 +340,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="linear-regression.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Old log-prob of sigma: </span><span class="sc">{</span>n_sigma<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <pre><code>## Old log-prob of sigma: -6.9721421531563434</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="linear-regression.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Old log-prob of y: </span><span class="sc">{</span>n_y<span class="sc">.</span>log_prob<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>## Old log-prob of y: -1623.4138228460292</code></pre>
+<pre><code>## Old log-prob of y: -1623.413822846029</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="linear-regression.html#cb32-1" aria-hidden="true" tabindex="-1"></a>n_sigma.value <span class="op">=</span> <span class="fl">1.0</span></span>
 <span id="cb32-2"><a href="linear-regression.html#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-3"><a href="linear-regression.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;New value of sigma: </span><span class="sc">{</span>n_sigma<span class="sc">.</span>value<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
@@ -349,7 +356,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## array(2029.4019, dtype=float32)
 ## 
 ## INFO - Unable to initialize backend &#39;tpu_driver&#39;: NOT_FOUND: Unable to find driver in registry given worker: 
-## INFO - Unable to initialize backend &#39;gpu&#39;: NOT_FOUND: Could not find registered platform with name: &quot;cuda&quot;. Available platform names are: Host Interpreter
+## INFO - Unable to initialize backend &#39;gpu&#39;: NOT_FOUND: Could not find registered platform with name: &quot;cuda&quot;. Available platform names are: Interpreter Host
 ## INFO - Unable to initialize backend &#39;tpu&#39;: INVALID_ARGUMENT: TpuPlatform is not available.
 ## WARNING - No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)</code></pre>
 </div>
@@ -362,12 +369,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## NodeState(value=1.0, log_prob=-4.6555311772972345)</code></pre>
 <p>The state of a model is defined as a dictionary of node states. The dictionary keys correspond to the node names.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="linear-regression.html#cb46-1" aria-hidden="true" tabindex="-1"></a>model.state.keys()</span></code></pre></div>
-<pre><code>## dict_keys([&#39;a&#39;, &#39;b&#39;, &#39;X&#39;, &#39;beta_scale&#39;, &#39;beta_loc&#39;, &#39;sigma&#39;, &#39;beta&#39;, &#39;y_hat&#39;, &#39;y&#39;])</code></pre>
+<pre><code>## dict_keys([&#39;b&#39;, &#39;a&#39;, &#39;X&#39;, &#39;beta_loc&#39;, &#39;beta_scale&#39;, &#39;sigma&#39;, &#39;beta&#39;, &#39;y_hat&#39;, &#39;y&#39;])</code></pre>
 <p>At first, the stateful Liesel objects seem incompatible with JAX’ pure functional programming paradigm (JAX’ <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">“anima di pura programmazione funzionale”</a>), but it is possible to separate the math and the data that are stored in the objects to use them with JAX. We have already seen how to extract the state, that is, the data from the model, so now we need to generate a pure, stateless function that computes the log-probability from the model state.</p>
 <p>The function <code>liesel.liesel.goose.make_log_prob_fn()</code> serves this exact purpose. The returned log-probability function requires two arguments: the model state as the second argument, and a position, that is, a subset of the model state defining with respect to which nodes the log-probability is evaluated, as the first argument. The position is important when computing the derivatives of the log-probability.</p>
 <p>Usually, the user doesn’t need to import or use the <code>make_log_prob_fn()</code> function, because the MCMC framework Goose hides this level of complexity, but it is important for a good understanding of the Liesel internals.</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="linear-regression.html#cb48-1" aria-hidden="true" tabindex="-1"></a>model.jaxify()</span></code></pre></div>
-<pre><code>## Model([Hyperparameter(..., name=&#39;a&#39;), Hyperparameter(..., name=&#39;b&#39;), DesignMatrix(..., name=&#39;X&#39;), ...])</code></pre>
+<pre><code>## Model([Hyperparameter(..., name=&#39;b&#39;), Hyperparameter(..., name=&#39;a&#39;), DesignMatrix(..., name=&#39;X&#39;), ...])</code></pre>
 <div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="linear-regression.html#cb50-1" aria-hidden="true" tabindex="-1"></a>log_prob_fn <span class="op">=</span> make_log_prob_fn(model)</span>
 <span id="cb50-2"><a href="linear-regression.html#cb50-2" aria-hidden="true" tabindex="-1"></a>log_prob_fn({<span class="st">&quot;sigma&quot;</span>: <span class="fl">1.0</span>}, model.state)</span></code></pre></div>
 <pre><code>## DeviceArray(-1740.374, dtype=float32)</code></pre>
@@ -400,91 +407,127 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Now we can run the MCMC algorithm for the specified duration by calling the <code>sample_all_epochs()</code> method on the engine. In a first step, the model and the sampling algorithm are compiled, so don’t worry if you don’t see an output right away. The subsequent samples will be generated much faster. Finally, we can extract the results and print a summary table.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="linear-regression.html#cb57-1" aria-hidden="true" tabindex="-1"></a>engine.sample_all_epochs()</span></code></pre></div>
 <pre><code>## INFO - Starting epoch: FAST_ADAPTATION, 75 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 4, 4, 3, 2 / 75 transitions
+## WARNING - Errors per chain for kernel_00: 3, 4, 3, 2 / 75 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 2, 3, 1, 1 / 25 transitions
+## WARNING - Errors per chain for kernel_00: 1, 1, 1, 1 / 25 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 2, 3, 1, 1 / 50 transitions
+## WARNING - Errors per chain for kernel_00: 0, 1, 2, 2 / 50 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 2, 0, 2, 1 / 100 transitions
+## WARNING - Errors per chain for kernel_00: 3, 2, 2, 3 / 100 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 4, 2, 2, 1 / 200 transitions
+## WARNING - Errors per chain for kernel_00: 3, 1, 1, 2 / 200 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 4, 1, 4, 1 / 500 transitions
+## WARNING - Errors per chain for kernel_00: 2, 3, 3, 1 / 500 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 2, 2, 2 / 50 transitions
+## WARNING - Errors per chain for kernel_00: 1, 2, 3, 1 / 50 transitions
 ## INFO - Finished epoch
 ## INFO - Finished warmup
 ## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
 ## INFO - Finished epoch</code></pre>
 <div class="sourceCode" id="cb59"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="linear-regression.html#cb59-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
 <span id="cb59-2"><a href="linear-regression.html#cb59-2" aria-hidden="true" tabindex="-1"></a>gs.Summary.from_result(results)</span></code></pre></div>
+
+<p><strong>Parameter summary:</strong></p>
 <table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>var_index</th>
-      <th>sample_size</th>
+      <th></th>
       <th>mean</th>
-      <th>var</th>
       <th>sd</th>
-      <th>rhat</th>
-      <th>ess_bulk</th>
-      <th>ess_tail</th>
-      <th>mcse_mean</th>
-      <th>mcse_sd</th>
       <th>q_0.05</th>
       <th>q_0.5</th>
       <th>q_0.95</th>
-      <th>hdi_low</th>
-      <th>hdi_high</th>
+      <th>sample_size</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>rhat</th>
+    </tr>
+    <tr>
+      <th>parameter</th>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>beta</th>
-      <td>(0,)</td>
+      <th rowspan="2" valign="top">beta</th>
+      <th>(0,)</th>
+      <td>0.9804</td>
+      <td>0.08649</td>
+      <td>0.83686</td>
+      <td>0.98198</td>
+      <td>1.12161</td>
       <td>4000</td>
-      <td>0.98041</td>
-      <td>0.00768</td>
-      <td>0.08764</td>
-      <td>1.00204</td>
-      <td>1063.82262</td>
-      <td>1309.64174</td>
-      <td>0.00269</td>
-      <td>0.00191</td>
-      <td>0.83539</td>
-      <td>0.9814</td>
-      <td>1.12654</td>
-      <td>0.84162</td>
-      <td>1.13003</td>
+      <td>1137.22968</td>
+      <td>1288.62319</td>
+      <td>1.00357</td>
     </tr>
     <tr>
-      <th>beta</th>
-      <td>(1,)</td>
+      <th>(1,)</th>
+      <td>1.91777</td>
+      <td>0.15141</td>
+      <td>1.66763</td>
+      <td>1.91722</td>
+      <td>2.16846</td>
       <td>4000</td>
-      <td>1.91613</td>
-      <td>0.02302</td>
-      <td>0.15173</td>
-      <td>1.0043</td>
-      <td>1100.8744</td>
-      <td>1152.45592</td>
-      <td>0.00459</td>
-      <td>0.00326</td>
-      <td>1.66434</td>
-      <td>1.91723</td>
-      <td>2.16965</td>
-      <td>1.69189</td>
-      <td>2.19485</td>
+      <td>1173.38422</td>
+      <td>1342.42051</td>
+      <td>1.00373</td>
     </tr>
   </tbody>
 </table>
+<p><strong>Error summary:</strong></p>
+<table border="0" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>count</th>
+      <th>relative</th>
+    </tr>
+    <tr>
+      <th>kernel</th>
+      <th>error_code</th>
+      <th>error_msg</th>
+      <th>phase</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">kernel_00</th>
+      <th rowspan="2" valign="top">1</th>
+      <th rowspan="2" valign="top">divergent transition</th>
+      <th>warmup</th>
+      <td>54</td>
+      <td>0.0135</td>
+    </tr>
+    <tr>
+      <th>posterior</th>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>If we need more samples, we can append another epoch to the engine and sample it by calling either the <code>sample_next_epoch()</code> or the <code>sample_all_epochs()</code> method. The epochs are described by <code>gs.EpochConfig</code> objects.</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb60-1"><a href="linear-regression.html#cb60-1" aria-hidden="true" tabindex="-1"></a>engine.append_epoch(</span>
 <span id="cb60-2"><a href="linear-regression.html#cb60-2" aria-hidden="true" tabindex="-1"></a>    gs.EpochConfig(gs.EpochType.POSTERIOR, duration<span class="op">=</span><span class="dv">1000</span>, thinning<span class="op">=</span><span class="dv">1</span>, optional<span class="op">=</span><span class="va">None</span>)</span>
@@ -526,19 +569,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## WARNING - Errors per chain for kernel_00: 2, 5, 2, 4 / 75 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 1, 3, 1 / 25 transitions
+## WARNING - Errors per chain for kernel_00: 1, 1, 2, 1 / 25 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 0, 2, 2, 1 / 50 transitions
+## WARNING - Errors per chain for kernel_00: 3, 2, 1, 1 / 50 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 2, 1, 1 / 100 transitions
+## WARNING - Errors per chain for kernel_00: 1, 2, 1, 2 / 100 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 4, 3, 1, 1 / 200 transitions
+## WARNING - Errors per chain for kernel_00: 2, 5, 4, 2 / 200 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 2, 4, 1, 3 / 500 transitions
+## WARNING - Errors per chain for kernel_00: 4, 5, 3, 2 / 500 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
 ## WARNING - Errors per chain for kernel_00: 2, 1, 1, 2 / 50 transitions
@@ -549,87 +592,118 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Goose provides a couple of convenient numerical and graphical summary tools. The <code>gs.Summary</code> class computes several summary statistics that can be either accessed programmatically or displayed as a summary table.</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb65-1"><a href="linear-regression.html#cb65-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
 <span id="cb65-2"><a href="linear-regression.html#cb65-2" aria-hidden="true" tabindex="-1"></a>gs.Summary.from_result(results)</span></code></pre></div>
+
+<p><strong>Parameter summary:</strong></p>
 <table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>var_index</th>
-      <th>sample_size</th>
+      <th></th>
       <th>mean</th>
-      <th>var</th>
       <th>sd</th>
-      <th>rhat</th>
-      <th>ess_bulk</th>
-      <th>ess_tail</th>
-      <th>mcse_mean</th>
-      <th>mcse_sd</th>
       <th>q_0.05</th>
       <th>q_0.5</th>
       <th>q_0.95</th>
-      <th>hdi_low</th>
-      <th>hdi_high</th>
+      <th>sample_size</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>rhat</th>
+    </tr>
+    <tr>
+      <th>parameter</th>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>beta</th>
-      <td>(0,)</td>
+      <th rowspan="2" valign="top">beta</th>
+      <th>(0,)</th>
+      <td>0.98404</td>
+      <td>0.09349</td>
+      <td>0.83192</td>
+      <td>0.98569</td>
+      <td>1.13872</td>
       <td>4000</td>
-      <td>0.98289</td>
-      <td>0.00914</td>
-      <td>0.09562</td>
-      <td>1.00664</td>
-      <td>1051.48282</td>
-      <td>1139.81108</td>
-      <td>0.00294</td>
-      <td>0.00208</td>
-      <td>0.82103</td>
-      <td>0.98308</td>
-      <td>1.1403</td>
-      <td>0.83559</td>
-      <td>1.15215</td>
+      <td>937.8801</td>
+      <td>1109.52105</td>
+      <td>1.00717</td>
     </tr>
     <tr>
-      <th>beta</th>
-      <td>(1,)</td>
+      <th>(1,)</th>
+      <td>1.90745</td>
+      <td>0.16327</td>
+      <td>1.64388</td>
+      <td>1.90506</td>
+      <td>2.17523</td>
       <td>4000</td>
-      <td>1.90942</td>
-      <td>0.02813</td>
-      <td>0.16771</td>
-      <td>1.00552</td>
-      <td>1027.67875</td>
-      <td>1075.49258</td>
-      <td>0.00525</td>
-      <td>0.00376</td>
-      <td>1.63428</td>
-      <td>1.90844</td>
-      <td>2.18775</td>
-      <td>1.61733</td>
-      <td>2.16349</td>
+      <td>922.02801</td>
+      <td>1313.59557</td>
+      <td>1.00624</td>
     </tr>
     <tr>
       <th>sigma</th>
-      <td>()</td>
-      <td>4000</td>
-      <td>1.04369</td>
-      <td>0.00429</td>
-      <td>0.06551</td>
-      <td>1.0004</td>
-      <td>3816.93553</td>
-      <td>3698.17721</td>
-      <td>0.00106</td>
-      <td>0.00075</td>
+      <th>()</th>
+      <td>1.04345</td>
+      <td>0.06552</td>
       <td>0.94177</td>
-      <td>1.04151</td>
-      <td>1.15542</td>
-      <td>0.94167</td>
-      <td>1.1554</td>
+      <td>1.04094</td>
+      <td>1.15586</td>
+      <td>4000</td>
+      <td>3818.93762</td>
+      <td>3812.36732</td>
+      <td>1.0004</td>
     </tr>
   </tbody>
 </table>
+<p><strong>Error summary:</strong></p>
+<table border="0" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>count</th>
+      <th>relative</th>
+    </tr>
+    <tr>
+      <th>kernel</th>
+      <th>error_code</th>
+      <th>error_msg</th>
+      <th>phase</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">kernel_00</th>
+      <th rowspan="2" valign="top">1</th>
+      <th rowspan="2" valign="top">divergent transition</th>
+      <th>warmup</th>
+      <td>64</td>
+      <td>0.016</td>
+    </tr>
+    <tr>
+      <th>posterior</th>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>The effective sample sizes <code>ess_bulk</code> and <code>ess_tail</code> seem rather low compared to the 4000 MCMC samples. We can plot the trace plots of the chains with <code>gs.plot_trace()</code>.</p>
 <div class="sourceCode" id="cb66"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb66-1"><a href="linear-regression.html#cb66-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_trace(results)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-28-5.png" width="961" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-28-5.png" width="673" /></p>
 <p>We could also take a look at a kernel density estimator with <code>gs.plot_density()</code> and the estimated autocorrelation with <code>gs.plot_cor()</code>. Alternatively, we can output all three diagnostic plots together with <code>gs.plot_param()</code>. The following plot shows the parameter <span class="math inline">\(\beta_0\)</span>.</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb67-1"><a href="linear-regression.html#cb67-1" aria-hidden="true" tabindex="-1"></a>gs.plot_param(results, param<span class="op">=</span><span class="st">&quot;beta&quot;</span>, param_index<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-29-7.png" width="864" /></p>
@@ -658,25 +732,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb70-14"><a href="linear-regression.html#cb70-14" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> builder.build()</span>
 <span id="cb70-15"><a href="linear-regression.html#cb70-15" aria-hidden="true" tabindex="-1"></a>engine.sample_all_epochs()</span></code></pre></div>
 <pre><code>## INFO - Starting epoch: FAST_ADAPTATION, 75 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 3, 2, 3, 3 / 75 transitions
+## WARNING - Errors per chain for kernel_00: 4, 3, 3, 3 / 75 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 25 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 1, 1, 1 / 25 transitions
+## WARNING - Errors per chain for kernel_00: 1, 2, 2, 1 / 25 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 50 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 1, 1, 2 / 50 transitions
+## WARNING - Errors per chain for kernel_00: 2, 3, 1, 2 / 50 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 100 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 2, 3, 1 / 100 transitions
+## WARNING - Errors per chain for kernel_00: 2, 4, 2, 2 / 100 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 200 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 1, 3, 5 / 200 transitions
+## WARNING - Errors per chain for kernel_00: 3, 2, 1, 4 / 200 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: SLOW_ADAPTATION, 500 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 2, 2, 3 / 500 transitions
+## WARNING - Errors per chain for kernel_00: 2, 2, 1, 3 / 500 transitions
 ## INFO - Finished epoch
 ## INFO - Starting epoch: FAST_ADAPTATION, 50 transitions, 25 jitted together
-## WARNING - Errors per chain for kernel_00: 1, 3, 2, 1 / 50 transitions
+## WARNING - Errors per chain for kernel_00: 1, 2, 1, 1 / 50 transitions
 ## INFO - Finished epoch
 ## INFO - Finished warmup
 ## INFO - Starting epoch: POSTERIOR, 1000 transitions, 25 jitted together
@@ -687,102 +761,128 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="_main_files/figure-html/unnamed-chunk-33-11.png" width="961" /></p>
 <p>We can also take a look at the summary table, which includes the original <span class="math inline">\(\sigma\)</span> and the transformed <span class="math inline">\(\log(\sigma)\)</span>.</p>
 <div class="sourceCode" id="cb73"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb73-1"><a href="linear-regression.html#cb73-1" aria-hidden="true" tabindex="-1"></a>gs.Summary.from_result(results)</span></code></pre></div>
+
+<p><strong>Parameter summary:</strong></p>
 <table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>var_index</th>
-      <th>sample_size</th>
+      <th></th>
       <th>mean</th>
-      <th>var</th>
       <th>sd</th>
-      <th>rhat</th>
-      <th>ess_bulk</th>
-      <th>ess_tail</th>
-      <th>mcse_mean</th>
-      <th>mcse_sd</th>
       <th>q_0.05</th>
       <th>q_0.5</th>
       <th>q_0.95</th>
-      <th>hdi_low</th>
-      <th>hdi_high</th>
+      <th>sample_size</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>rhat</th>
+    </tr>
+    <tr>
+      <th>parameter</th>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>beta</th>
-      <td>(0,)</td>
+      <th rowspan="2" valign="top">beta</th>
+      <th>(0,)</th>
+      <td>0.98324</td>
+      <td>0.09361</td>
+      <td>0.82721</td>
+      <td>0.98637</td>
+      <td>1.13255</td>
       <td>4000</td>
-      <td>0.98794</td>
-      <td>0.00861</td>
-      <td>0.09279</td>
-      <td>1.00208</td>
-      <td>1417.49581</td>
-      <td>1913.23942</td>
-      <td>0.00247</td>
-      <td>0.00175</td>
-      <td>0.83604</td>
-      <td>0.98815</td>
-      <td>1.14109</td>
-      <td>0.8263</td>
-      <td>1.13091</td>
+      <td>1428.97403</td>
+      <td>1807.26304</td>
+      <td>1.00292</td>
     </tr>
     <tr>
-      <th>beta</th>
-      <td>(1,)</td>
+      <th>(1,)</th>
+      <td>1.90813</td>
+      <td>0.16457</td>
+      <td>1.64101</td>
+      <td>1.90491</td>
+      <td>2.187</td>
       <td>4000</td>
-      <td>1.90159</td>
-      <td>0.02653</td>
-      <td>0.16287</td>
+      <td>1368.94123</td>
+      <td>1768.344</td>
       <td>1.00285</td>
-      <td>1368.17699</td>
-      <td>1601.74044</td>
-      <td>0.0044</td>
-      <td>0.00311</td>
-      <td>1.63251</td>
-      <td>1.89996</td>
-      <td>2.17422</td>
-      <td>1.65834</td>
-      <td>2.19631</td>
     </tr>
     <tr>
       <th>sigma</th>
-      <td>()</td>
+      <th>()</th>
+      <td>1.02118</td>
+      <td>0.03301</td>
+      <td>0.96817</td>
+      <td>1.02006</td>
+      <td>1.07644</td>
       <td>4000</td>
-      <td>1.02134</td>
-      <td>0.00108</td>
-      <td>0.0329</td>
-      <td>1.00067</td>
-      <td>2643.27451</td>
-      <td>2331.78642</td>
-      <td>0.00064</td>
-      <td>0.00045</td>
-      <td>0.96774</td>
-      <td>1.02061</td>
-      <td>1.07647</td>
-      <td>0.96369</td>
-      <td>1.07182</td>
+      <td>2677.75895</td>
+      <td>2504.45464</td>
+      <td>0.99998</td>
     </tr>
     <tr>
       <th>sigma_transformed</th>
-      <td>()</td>
+      <th>()</th>
+      <td>0.02044</td>
+      <td>0.0323</td>
+      <td>-0.03235</td>
+      <td>0.01986</td>
+      <td>0.07366</td>
       <td>4000</td>
-      <td>0.0206</td>
-      <td>0.00104</td>
-      <td>0.03218</td>
-      <td>1.00067</td>
-      <td>2643.30305</td>
-      <td>2331.78642</td>
-      <td>0.00063</td>
-      <td>0.00051</td>
-      <td>-0.03279</td>
-      <td>0.0204</td>
-      <td>0.07369</td>
-      <td>-0.03021</td>
-      <td>0.07564</td>
+      <td>2677.75939</td>
+      <td>2504.45464</td>
+      <td>0.99995</td>
     </tr>
   </tbody>
 </table>
+<p><strong>Error summary:</strong></p>
+<table border="0" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>count</th>
+      <th>relative</th>
+    </tr>
+    <tr>
+      <th>kernel</th>
+      <th>error_code</th>
+      <th>error_msg</th>
+      <th>phase</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">kernel_00</th>
+      <th rowspan="2" valign="top">1</th>
+      <th rowspan="2" valign="top">divergent transition</th>
+      <th>warmup</th>
+      <td>60</td>
+      <td>0.015</td>
+    </tr>
+    <tr>
+      <th>posterior</th>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>The effective sample size is higher for <span class="math inline">\(\sigma\)</span> than for <span class="math inline">\(\boldsymbol{\beta}\)</span>. Finally, let’s check the autocorrelation of the samples.</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb74-1"><a href="linear-regression.html#cb74-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_cor(results)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-35-13.png" width="961" /></p>
