@@ -345,7 +345,7 @@ The latter option might lead to better estimation results but lacks the flexibil
 <p>Now that we have 1000 posterior samples per chain, we can check the results. Starting with the trace plots just using one chain.</p>
 <div class="sourceCode" id="cb85"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb85-1"><a href="location-scale-regression.html#cb85-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
 <span id="cb85-2"><a href="location-scale-regression.html#cb85-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_trace(results, chain_indices<span class="op">=</span><span class="dv">0</span>, ncol<span class="op">=</span><span class="dv">4</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-43-19.png" width="673" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-43-19.png" width="1249" /></p>
 <p>Looks decent although we can see some correlation in the tracplots especially for <span class="math inline">\(\beta\)</span>. Let’s check at the combined summary:</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb86-1"><a href="location-scale-regression.html#cb86-1" aria-hidden="true" tabindex="-1"></a>gs.summary(results, per_chain<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
 <div>
@@ -488,7 +488,7 @@ The latter option might lead to better estimation results but lacks the flexibil
 ## INFO - Finished epoch</code></pre>
 <div class="sourceCode" id="cb89"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb89-1"><a href="location-scale-regression.html#cb89-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> engine.get_results()</span>
 <span id="cb89-2"><a href="location-scale-regression.html#cb89-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> gs.plot_trace(results, chain_indices<span class="op">=</span><span class="dv">0</span>, ncol<span class="op">=</span><span class="dv">4</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-46-21.png" width="673" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-46-21.png" width="1249" /></p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb90-1"><a href="location-scale-regression.html#cb90-1" aria-hidden="true" tabindex="-1"></a>gs.summary(results, per_chain<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
 <div>
 <style scoped>

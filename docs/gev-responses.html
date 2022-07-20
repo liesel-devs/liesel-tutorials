@@ -206,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## Loading required package: stats4</code></pre>
 <pre><code>## Loading required package: splines</code></pre>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="gev-responses.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">use_liesel_venv</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;/home/hannes/.virtualenvs/liesel-tutorials-1k9wp3mI&quot;</code></pre>
+<pre><code>## [1] &quot;/home/hannes/.local/share/virtualenvs/liesel-tutorials-1k9wp3mI&quot;</code></pre>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="gev-responses.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1337</span>)</span>
 <span id="cb98-2"><a href="gev-responses.html#cb98-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb98-3"><a href="gev-responses.html#cb98-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
@@ -811,11 +811,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb107"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb107-1"><a href="gev-responses.html#cb107-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;loc_np0_tau2&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-51-2.png" width="385" /></p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb108-1"><a href="gev-responses.html#cb108-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;loc_np0_beta&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-51-3.png" width="385" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-3.png" width="961" /></p>
 <div class="sourceCode" id="cb109"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb109-1"><a href="gev-responses.html#cb109-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;scale_p0_beta&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-51-4.png" width="385" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-4.png" width="673" /></p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="gev-responses.html#cb110-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> gs.plot_trace(results, <span class="st">&quot;concentration_p0_beta&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-51-5.png" width="385" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-5.png" width="673" /></p>
 <p>We need to reset the index of the <code>summary</code> data frame before we can transfer it to R.</p>
 <div class="sourceCode" id="cb111"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb111-1"><a href="gev-responses.html#cb111-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> summary.reset_index()</span></code></pre></div>
 <p>After transferring the <code>summary</code> data frame to R, we can process it with packages like dplyr and ggplot2. Here is a visualization of the estimated spline vs. the true function:</p>
