@@ -1,3 +1,5 @@
+:warning: **This repository is archived.** Please see the [project homepage](https://liesel-project.org) and the [main repository](https://github.com/liesel-devs/liesel/tree/main/docs/source/tutorials) instead.
+
 # Liesel Tutorials
 
 This repository contains the code for the tutorial book for the [Liesel](https://github.com/liesel-devs/liesel) probabilistic programming framework. Please take a look at [the compiled book](https://liesel-devs.github.io/liesel-tutorials) first, unless you want to contribute to the tutorials.
